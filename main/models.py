@@ -95,6 +95,8 @@ class Image (models.Model):
     def int(self):
         return self.id
 
+
+
 class File (models.Model):
     name = models.CharField(max_length=254, blank=True, null=True)
     file = FileField(upload_to='documents/%y/%m/%d')
@@ -119,10 +121,10 @@ class Software(models.Model):
     software_name = models.CharField(max_length=150, null=False)
     created_datetime = models.DateTimeField(auto_now_add=True)
     update_datetime = models.DateTimeField(auto_now=True)
-    image = models.ForeignKey("main.Image", on_delete=models.SET_NULL, blank=True, null=True)
+    image = models.ForeignKey(Image, on_delete=models.SET_NULL, blank=True, null=True)
     rating = models.DecimalField(max_digits=3, decimal_places=2, null=True, blank=True )
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    area = models.ForeignKey(ApplicationArea, null=True, blank=True, on_delete=models.CASCADE, default=1)
+    area = models.ForeignKey(ApplicationArea, on_delete=models.CASCADE)
     download_link = models.CharField(max_length=1000)
     description = models.TextField()
     is_active = models.BooleanField(default=True)
@@ -139,284 +141,152 @@ class Software(models.Model):
 
 
 
-# class SoftwareEvaluate(models.Model):
-#     software = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True)
-#     metric_category = models.ForeignKey(
-#         "main.Metric", on_delete=models.SET_NULL, null=True)
-#     people = models.PositiveSmallIntegerField(blank=True, null=True)
-
-#     def int(self):
-#         return self.software
 
 
-# class Category(models.Model):
-#     name = models.CharField(max_length=256, blank=True)
-#     created_datetime = models.DateTimeField(
-#         auto_now_add=True, verbose_name="تاریخ ایجاد ")
-#     update_datetime = models.DateTimeField(
-#         auto_now=True, verbose_name="تاریخ بروزرسانی ")
-
-#     def __str__(self):
-#         return self.name
 
 
-# class Metric(models.Model):
-#     title = models.CharField(max_length=254)
-#     categorymetric = models.ForeignKey(
-#         "main.Category", on_delete=models.SET_NULL, null=True)
-
-#     def __str__(self):
-#         return self.title
+class SoftwareSection(models.Model):
+    software = models.ForeignKey(Software, on_delete=models.CASCADE)
+    title = models.CharField(max_length=254)
 
 
-# class MetricEvaluate(models.Model):
-#     software = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True, related_name='softwareEvaluates')
-#     metric_category = models.ForeignKey(
-#         "main.Category", on_delete=models.SET_NULL, null=True)
-#     people = models.PositiveSmallIntegerField(blank=True, null=True)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#     created_datetime = models.DateTimeField(auto_now=True)
-#     isEvaluated = models.BooleanField(default=False)
-#     evaluated_by = models.TextField(blank=True, null=True)
-
-#     class Meta:
-#         ordering = ['-id']
-
-#     def int(self):
-#         return self.software
 
 
-# class MetricEvaluateDetails(models.Model):
-#     metricEvaluate = models.ForeignKey(
-#         "main.MetricEvaluate", on_delete=models.SET_NULL, null=True, related_name='selectedMetricEvaluate')
-#     metric = models.ForeignKey(
-#         "main.Metric", on_delete=models.SET_NULL, null=True, related_name='selectedMetrics')
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#     created_datetime = models.DateTimeField(auto_now=True)
-
-#     class Meta:
-#         ordering = ['-id']
-
-#     def int(self):
-#         return self.metricEvaluate
 
 
-# class MetricValue(models.Model):
-#     metric = models.ForeignKey(
-#         "main.Metric", on_delete=models.SET_NULL, null=True, related_name='metricValues')
-#     metricEvaluate = models.ForeignKey(
-#         "main.MetricEvaluate", on_delete=models.SET_NULL, null=True, related_name='metricValues2')
-#     value = models.PositiveIntegerField(blank=True, null=True)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-
-#     # def int(self):
-#     #     return self.id
-
-#     def int(self):
-#         return self.value
 
 
-# class RankEvaluate(models.Model):
-#     software = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True)
-#     people = models.PositiveSmallIntegerField(blank=True, null=True)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#     created_datetime = models.DateTimeField(auto_now=True)
-#     isEvaluated = models.BooleanField(default=False)
-#     evaluated_by = models.TextField(blank=True, null=True)
 
-#     def int(self):
-#         return self.id
+class MetricCategory(models.Model):
+    name = models.CharField(max_length=256, blank=True)
+    created_datetime = models.DateTimeField(auto_now_add=True)
+    update_datetime = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
 
 
-# class RankValue(models.Model):
-#     rankEvaluate = models.ForeignKey(
-#         "main.RankEvaluate", on_delete=models.SET_NULL, null=True)
-#     rankValue = models.DecimalField(max_digits=3, decimal_places=2, null=False)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+class Metric(models.Model):
+    title = models.CharField(max_length=254)
+    category = models.ForeignKey(MetricCategory, on_delete=models.CASCADE)
 
-#     def int(self):
-#         return self.rankValue
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['category']
 
-
-# class Comment(models.Model):
-#     commentEvaluate = models.ForeignKey(
-#         "main.CommentEvaluate", on_delete=models.SET_NULL, null=True)
-#     textComment = models.CharField(max_length=1000, blank=True, null=False)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-
-#     def int(self):
-#         return self.id
+class MetricEvaluate(models.Model):
+    software = models.ForeignKey(Software, on_delete=models.CASCADE)
+    metric = models.ForeignKey(Metric, on_delete=models.CASCADE)
+    max = models.PositiveSmallIntegerField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_datetime = models.DateTimeField(auto_now=True)
 
 
-# class CommentEvaluate(models.Model):
-#     software = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True)
-#     people = models.PositiveSmallIntegerField(blank=True, null=True)
-#     # commentText = models.CharField(max_length=1000, blank=True ,null=False)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#     created_datetime = models.DateTimeField(auto_now=True)
-#     isEvaluated = models.BooleanField(default=False)
-#     evaluated_by = models.TextField(blank=True, null=True)
-
-#     class Meta:
-#         ordering = ['-id']
-
-#     def int(self):
-#         return self.id
 
 
-# class Compare(models.Model):
-#     software = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True, related_name='software')
-#     software_2 = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True, related_name='software_2')
-#     # compareResult = models.CharField(max_length=256, blank=True)
-#     people = models.PositiveSmallIntegerField(blank=True, null=True)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#     created_datetime = models.DateTimeField(auto_now=True)
-#     isEvaluated = models.BooleanField(default=False)
-#     evaluated_by = models.TextField(blank=True, null=True)
-
-#     def int(self):
-#         return self.id
 
 
-# class CompareValue(models.Model):
-#     software = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True)
-#     nameSoft = models.CharField(max_length=256, blank=True)
-#     compare = models.ForeignKey(
-#         "main.Compare", on_delete=models.SET_NULL, null=True)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-
-#     def int(self):
-#         return self.id
-
-#     class Meta:
-#         ordering = ['software']
 
 
-# class Categoryquestion(models.Model):
-#     name = models.CharField(max_length=256, blank=True)
-#     created_datetime = models.DateTimeField(
-#         auto_now_add=True, verbose_name="تاریخ ایجاد ")
-#     update_datetime = models.DateTimeField(
-#         auto_now=True, verbose_name="تاریخ بروزرسانی ")
 
-#     def __str__(self):
-#         return self.name
+class CommentEvaluate(models.Model):
+    software = models.ForeignKey(Software, on_delete=models.CASCADE)
+    section = models.ForeignKey(SoftwareSection, on_delete=models.CASCADE)
+    max = models.PositiveSmallIntegerField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_datetime = models.DateTimeField(auto_now=True)
 
-
-# class Question(models.Model):
-#     questionText = models.CharField(max_length=254)
-#     #questionAnswer = models.CharField(max_length=254, blank=True)
-#     questionClass = models.ForeignKey(
-#         "main.Categoryquestion", on_delete=models.SET_NULL, blank=True, null=True)
-#     # answerValue = models.CharField(max_length=100,choices=ANSER_VALUE_CHOICES,default='admin')
-
-#     def __str__(self):
-#         return self.questionText
+    class Meta:
+        db_table = "main_commentevaluate2"
 
 
-# class QuestionEvaluate(models.Model):
-#     # softwareEvaluate    = models.ForeignKey("main.SoftwareEvaluate", on_delete=models.SET_NULL, null=True, related_name='questionAnswers')
-#     software = models.ForeignKey(
-#         "main.Software", on_delete=models.SET_NULL, null=True)
-#     select_category = models.ForeignKey(
-#         "main.Categoryquestion", on_delete=models.SET_NULL, null=True, related_name='questionAnswers2')
-#     people = models.PositiveSmallIntegerField(blank=True, null=True)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#     created_datetime = models.DateTimeField(auto_now=True)
-#     isEvaluated = models.BooleanField(default=False)
-#     evaluated_by = models.TextField(blank=True, null=True)
 
-#     def int(self):
-#         return self.id
+class RatingEvaluate(models.Model):
+    software = models.ForeignKey(Software, on_delete=models.CASCADE)
+    section = models.ForeignKey(SoftwareSection, on_delete=models.CASCADE)
+    max = models.PositiveSmallIntegerField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_datetime = models.DateTimeField(auto_now=True)
 
 
-# ANSER_VALUE_CHOICES = (
-#     ('excellent', 'Excellent'),
-#     ('verygood', 'Very Good'),
-#     ('good', 'Good'),
-#     ('medium', 'Medium'),
-#     ('bad', 'Bad')
-# )
 
 
-# class QuestionValue(models.Model):
-#     global ANSER_VALUE_CHOICES
-#     question = models.ForeignKey(
-#         "main.Question", on_delete=models.SET_NULL, null=True, related_name='QuestionValue')
-#     questionEvaluate = models.ForeignKey(
-#         "main.QuestionEvaluate", on_delete=models.SET_NULL, null=True, related_name='questionEvaluate2')
-#     value = models.CharField(null=False, max_length=10,
-#                              choices=ANSER_VALUE_CHOICES)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+class CompareEvaluate(models.Model):
+    software = models.ForeignKey(Software, on_delete=models.CASCADE, related_name="software")
+    target_software = models.ForeignKey(Software, on_delete=models.CASCADE, related_name="target_software")
+    metric = models.ForeignKey(Metric, on_delete=models.CASCADE)
+    max = models.PositiveSmallIntegerField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_datetime = models.DateTimeField(auto_now=True)
 
-#     # def int(self):
-#     #     return self.id
-
-#     def int(self):
-#         return self.value
-
-
-# class Stats(models.Model):
-#     quesEvaluateid = models.IntegerField(blank=True, null=True)
-#     softwareid = models.IntegerField(blank=True, null=True)
-#     questionid = models.IntegerField(blank=True, null=True)
-#     category_id = models.IntegerField(blank=True, null=True)
-#     evaluatedby_id = models.IntegerField(blank=True, null=True)
-#     software_name = models.CharField(max_length=254)
-#     Question = models.CharField(max_length=254)
-#     evaluatedby = models.CharField(max_length=254)
-#     value = models.CharField(max_length=254)
-
-#     def save(self, *args, **kwargs):
-#         raise NotSupportedError(
-#             'This model is tied to a view, it cannot be saved.')
-
-#     class Meta:
-#         managed = False
-#         db_table = 'v_stats'    # this is what you named your view
-#         verbose_name = 'Stat'
-#         verbose_name_plural = 'Stats'
-#         ordering = ['software_name']
+    def save(self, *args, **kwargs):
+        if self.software.id == self.target_software.id:
+            raise Exception("Software and it's target are the same")
+        if self.software.area_id != self.target_software.area_id:
+            raise Exception("Software and it's target must be from one application area")
+        return super().save(*args, **kwargs)
 
 
-# class Package(models.Model):
-#     package_name = models.CharField(max_length=254, blank=True, null=True)
-#     metricEvaluate = models.ForeignKey(
-#         "main.MetricEvaluate", on_delete=models.SET_NULL, null=True, blank=True)
-#     questionEvaluate = models.ForeignKey(
-#         "main.QuestionEvaluate", on_delete=models.SET_NULL, null=True, blank=True)
-#     compare = models.ForeignKey(
-#         "main.Compare", on_delete=models.SET_NULL, null=True, blank=True)
-#     comment = models.ForeignKey(
-#         "main.CommentEvaluate", on_delete=models.SET_NULL, null=True, blank=True)
-#     rank = models.ForeignKey(
-#         "main.RankEvaluate", on_delete=models.SET_NULL, null=True, blank=True)
-#     istemplate = models.BooleanField(default=False)
-#     created_by = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-#     created_datetime = models.DateTimeField(
-#         auto_now_add=True, verbose_name="تاریخ ایجاد ")
-#     update_datetime = models.DateTimeField(
-#         auto_now=True, verbose_name="تاریخ بروزرسانی ")
 
 
-#     def __str__(self):
-#         return self.package_name
+
+
+
+
+
+
+
+
+
+
+
+class QuestionnaireCategory(models.Model):
+    name = models.CharField(max_length=256, blank=True)
+    created_datetime = models.DateTimeField(auto_now_add=True)
+    update_datetime = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Questionnaire(models.Model):
+    title = models.CharField(max_length=254)
+    category = models.ForeignKey(QuestionnaireCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
+    
+    class Meta:
+        ordering = ['category']
+
+
+
+
+
+
+class QuestionnaireEvaluate(models.Model):
+    software = models.ForeignKey(Software, on_delete=models.CASCADE)
+    questionnaire = models.ForeignKey(Questionnaire, on_delete=models.CASCADE)
+    max = models.PositiveSmallIntegerField(blank=True)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    created_datetime = models.DateTimeField(auto_now=True)
+
+
+
+
+
+
+
+
+
+
+
+
+

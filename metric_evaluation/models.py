@@ -34,7 +34,7 @@ class MetricEvaluate(models.Model):
     max = models.PositiveSmallIntegerField(blank=True)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(
-        "authentication.Account", on_delete=models.CASCADE,
+        "authentication.Account", on_delete=models.CASCADE
     )
     created_datetime = models.DateTimeField(auto_now=True)
     modified_datetime = models.DateTimeField(auto_now=True)

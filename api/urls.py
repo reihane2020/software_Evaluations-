@@ -20,9 +20,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('auth/', include('authentication.urls')),
-    path('upload/', include('upload.urls')),
-    path('software/', include('software.urls')),
-    path('setting/', include('setting.urls')),
+    path(r'admin/', admin.site.urls),
+    path(r'auth/', include('authentication.urls')),
+    path(r'upload/', include('upload.urls')),
+    path(r'setting/', include('setting.urls')),
+
+    path(r'software/', include('software.urls')),
+    path(r'metric/', include('metric_evaluation.urls')),
+    path(r'comment/', include('comment_evaluation.urls')),
+    path(r'rating/', include('rating_evaluation.urls')),
+    path(r'compare/', include('compare_evaluation.urls')),
+    path(r'questionnaire/', include('questionnaire_evaluation.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

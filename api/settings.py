@@ -54,11 +54,21 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'rest_framework_simplejwt',
-    
+    'allauth.socialaccount',
+
 
     'authentication',
+    'software',
     'upload',
     'setting',
+
+    'metric_evaluation',
+    'comment_evaluation',
+    'rating_evaluation',
+    'compare_evaluation',
+    'questionnaire_evaluation',
+
+
 
 
 ]
@@ -66,7 +76,6 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -144,7 +153,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -154,8 +162,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    
-   'DEFAULT_AUTHENTICATION_CLASSES': (
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 
@@ -163,14 +171,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated'
     ],
-    
-    
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
     ),
 
     'EXCEPTION_HANDLER': 'api.utils.custom_exception_handler',
 }
+
+SITE_ID = 1
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -188,13 +196,12 @@ CORS_ALLOWED_ORIGINS = [
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
-
 AUTH_USER_MODEL = 'authentication.Account'
 
-# REST_AUTH_SERIALIZERS = {
-#     'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserDetailSerializer',
-# }
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'authentication.serializers.CustomUserDetailSerializer',
+}
 
-# REST_AUTH_REGISTER_SERIALIZERS = {
-#     'REGISTER_SERIALIZER': 'authentication.serializers.CustomRegisterSerializer',
-# }
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'authentication.serializers.CustomRegisterSerializer',
+}

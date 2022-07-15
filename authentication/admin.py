@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Account
+from .models import Account, Degree
 from django.contrib.auth.admin import UserAdmin
 
 
@@ -12,53 +12,45 @@ class _UserAdmin(UserAdmin):
                 "first_name",
                 "last_name",
                 "email",
+                "phone_number",
+                "is_verified_phone",
+                "degree",
                 "avatar"
             )
         }
     ]
 
-    referral = [
-        "Referral",
-        {
-            "fields": [
-                "token",
-                "referrals",
-                "inviter"
-            ]
-        }
-    ]
-
-    fieldLicense = [
-        "License",
+    permissions = [
+        "Permissions",
         {
             "fields": (
-                "license",
-                "license_expire"
+                "is_staff",
+                "is_active",
+                "is_superuser",
             )
         }
     ]
 
-    broker = [
-        "Broker",
+    date = [
+        "Date",
         {
-            "fields": ["broker"]
+            "fields": (
+                "last_login",
+                "date_joined",
+            )
         }
     ]
 
     fieldsets = [
         UserAdmin.fieldsets[0],
         personalInfo,
-        fieldLicense,
-        broker,
-        referral,
-        UserAdmin.fieldsets[2],
-        UserAdmin.fieldsets[3]
+        permissions,
+        date
     ]
 
     # fieldsets = UserAdmin.fieldsets
 
     list_display = (
-        "username",
         "email",
         "first_name",
         "last_name",
@@ -77,4 +69,4 @@ class _UserAdmin(UserAdmin):
 
 
 admin.site.register(Account, _UserAdmin)
-# admin.site.register(UserProfile)
+admin.site.register(Degree)

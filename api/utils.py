@@ -6,10 +6,6 @@ def custom_exception_handler(exc, context):
 
     response = exception_handler(exc, context)
 
-    # ErrorLog.objects.create( #TODO
-    #         status_code = exc.response.status_code,
-
-    #     )
     if hasattr(exc, 'detail'):
         detail = exc.detail
     elif response and hasattr(response, 'data') and 'detail' in response.data:
@@ -28,9 +24,8 @@ def custom_exception_handler(exc, context):
         status_code = response.status_code
     else:
         status_code = 406
-    
+
     return Response({
-        "message"       : detail,
-        "code"          : code,
-        "status_code"   : status_code
+        "message": detail,
+        "code": code,
     }, status=status_code)

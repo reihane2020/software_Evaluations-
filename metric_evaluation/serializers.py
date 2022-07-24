@@ -1,3 +1,4 @@
+from software.models import Software
 from .models import *
 from rest_framework import serializers
 
@@ -9,15 +10,13 @@ class MetricCategorySerializer(serializers.ModelSerializer):
 
 
 class MetricParameterSerializer(serializers.ModelSerializer):
-
-    category = MetricCategorySerializer(read_only=True)
-
     class Meta:
         model = MetricParameter
         fields = ['id', 'title', 'category']
 
 
 class MetricEvaluateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = MetricEvaluate
         fields = [
@@ -27,5 +26,4 @@ class MetricEvaluateSerializer(serializers.ModelSerializer):
             'parameters',
             'max',
             'is_active',
-            'created_by',
         ]

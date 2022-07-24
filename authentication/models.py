@@ -12,7 +12,6 @@ class Degree(models.Model):
         return self.title
 
 
-
 class Account(AbstractUser):
 
     is_staff = models.BooleanField(
@@ -57,6 +56,3 @@ class Account(AbstractUser):
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "username", "phone_number"]
-
-
-

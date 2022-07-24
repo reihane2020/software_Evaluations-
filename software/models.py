@@ -35,7 +35,7 @@ class Software(models.Model):
     area = models.ForeignKey(
         SoftwareArea, on_delete=models.SET_NULL, null=True, blank=True
     )
-    sections = models.ManyToManyField(SoftwareSection,)
+    sections = models.ManyToManyField(SoftwareSection,  blank=True)
     download_link = models.CharField(max_length=1000)
     description = models.TextField()
     is_active = models.BooleanField(default=True)

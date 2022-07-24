@@ -67,10 +67,6 @@ INSTALLED_APPS = [
     'rating_evaluation',
     'compare_evaluation',
     'questionnaire_evaluation',
-
-
-
-
 ]
 
 MIDDLEWARE = [
@@ -158,6 +154,7 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_USE_JWT = True
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,

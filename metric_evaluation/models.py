@@ -26,15 +26,28 @@ class MetricParameter(models.Model):
 
 
 class MetricEvaluate(models.Model):
-    software = models.ForeignKey("software.Software", on_delete=models.CASCADE)
 
-    category = models.ForeignKey(MetricCategory, on_delete=models.CASCADE)
-    parameters = models.ManyToManyField(MetricParameter,)
+    category = models.ForeignKey(
+        MetricCategory,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
+    )
+    parameters = models.ManyToManyField(MetricParameter, blank=True)
 
-    max = models.PositiveSmallIntegerField(blank=True)
+    software = models.ForeignKey(
+        "software.Software",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    max = models.PositiveSmallIntegerField(blank=False, null=False)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(
-        "authentication.Account", on_delete=models.CASCADE
+        "authentication.Account",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
     )
     created_datetime = models.DateTimeField(auto_now=True)
     modified_datetime = models.DateTimeField(auto_now=True)

@@ -13,5 +13,4 @@ class CompareEvaluateSerializer(serializers.ModelSerializer):
             'parameters',
             'max',
             'is_active',
-            'created_by'
         ]

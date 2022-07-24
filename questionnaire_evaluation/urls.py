@@ -4,6 +4,8 @@ from .views import *
 
 router = routers.DefaultRouter()
 
-# router.register(r'', SoftwareViewSet)
+router.register(r'category', QuestionnaireCategoryViewSet)
+router.register(r'parameter', QuestionnaireParameterViewSet)
+router.register(r'', QuestionnaireEvaluateViewSet)
 
 urlpatterns = router.urls

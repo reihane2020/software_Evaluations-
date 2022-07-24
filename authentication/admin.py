@@ -12,8 +12,7 @@ class _UserAdmin(UserAdmin):
                 "first_name",
                 "last_name",
                 "email",
-                "phone_number",
-                "is_verified_phone",
+                ("phone_number", "is_verified_phone"),
                 "degree",
                 "avatar"
             )
@@ -58,7 +57,7 @@ class _UserAdmin(UserAdmin):
         "is_superuser",
         "is_active",
         "last_login",
-        "date_joined"
+        "date_joined",
     )
 
     list_editable = [

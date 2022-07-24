@@ -4,14 +4,27 @@ from django.db import models
 
 
 class RatingEvaluate(models.Model):
-    software = models.ForeignKey("software.Software", on_delete=models.CASCADE)
+
     section = models.ForeignKey(
-        "software.SoftwareSection", on_delete=models.CASCADE,
+        "software.SoftwareSection",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True
     )
-    max = models.PositiveSmallIntegerField(blank=True)
+
+    software = models.ForeignKey(
+        "software.Software",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    max = models.PositiveSmallIntegerField(blank=False, null=False)
     is_active = models.BooleanField(default=True)
     created_by = models.ForeignKey(
-        "authentication.Account", on_delete=models.CASCADE
+        "authentication.Account",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
     )
     created_datetime = models.DateTimeField(auto_now=True)
     modified_datetime = models.DateTimeField(auto_now=True)
@@ -20,7 +33,10 @@ class RatingEvaluate(models.Model):
         if self.section in self.software.sections.all():
             pass
         else:
-            raise Exception(
-                "Selected section is not in sections of this software"
-            )
+            if self.section == None:
+                pass
+            else:
+                raise Exception(
+                    "Selected section is not in sections of this software"
+                )
         return super().save(*args, **kwargs)

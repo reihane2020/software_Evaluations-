@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 
 class CommentEvaluateSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = CommentEvaluate
         fields = [
@@ -11,5 +12,4 @@ class CommentEvaluateSerializer(serializers.ModelSerializer):
             'section',
             'max',
             'is_active',
-            'created_by'
         ]

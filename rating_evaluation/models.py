@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import IntegerField
 
 # Create your models here.
 
@@ -40,3 +41,25 @@ class RatingEvaluate(models.Model):
                     "Selected section is not in sections of this software"
                 )
         return super().save(*args, **kwargs)
+
+
+# ******
+
+class RatingEvaluateResult(models.Model):
+    evaluate = models.ForeignKey(
+        RatingEvaluate,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    rating = models.PositiveIntegerField(blank=True, null=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    evaluated_by = models.ForeignKey(
+        "authentication.Account",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+
+    class Meta:
+        ordering = ['-id']

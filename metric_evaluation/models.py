@@ -26,7 +26,6 @@ class MetricParameter(models.Model):
 
 
 class MetricEvaluate(models.Model):
-
     category = models.ForeignKey(
         MetricCategory,
         on_delete=models.CASCADE,
@@ -49,5 +48,36 @@ class MetricEvaluate(models.Model):
         blank=False,
         null=False
     )
-    created_datetime = models.DateTimeField(auto_now=True)
+    created_datetime = models.DateTimeField(auto_now_add=True)
     modified_datetime = models.DateTimeField(auto_now=True)
+
+
+# ******
+
+class MetricEvaluateValue(models.Model):
+    parameter = models.ForeignKey(
+        MetricParameter,
+        on_delete=models.CASCADE,
+        null=False,
+    )
+    value = models.PositiveIntegerField(null=False, blank=False,)
+
+
+class MetricEvaluateResult(models.Model):
+    evaluate = models.ForeignKey(
+        MetricEvaluate,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    values = models.ManyToManyField(MetricEvaluateValue, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    evaluated_by = models.ForeignKey(
+        "authentication.Account",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+
+    class Meta:
+        ordering = ['-id']

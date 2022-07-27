@@ -61,7 +61,6 @@ class SoftwareSerializer(serializers.ModelSerializer):
             'id',
             'name',
             'logo',
-            'created_by',
             'rating',
             'description',
             'area',

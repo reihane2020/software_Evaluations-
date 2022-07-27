@@ -40,3 +40,26 @@ class CommentEvaluate(models.Model):
                     "Selected section is not in sections of this software"
                 )
         return super().save(*args, **kwargs)
+
+
+# ******
+
+
+class CommentEvaluateResult(models.Model):
+    evaluate = models.ForeignKey(
+        CommentEvaluate,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    comment = models.TextField(blank=True, null=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    evaluated_by = models.ForeignKey(
+        "authentication.Account",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+
+    class Meta:
+        ordering = ['-id']

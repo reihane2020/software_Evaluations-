@@ -1,4 +1,3 @@
-from software.models import Software
 from .models import *
 from rest_framework import serializers
 

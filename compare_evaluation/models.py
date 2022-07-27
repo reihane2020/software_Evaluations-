@@ -1,5 +1,5 @@
 from django.db import models
-
+from software.models import Software
 # Create your models here.
 
 
@@ -46,7 +46,7 @@ class CompareEvaluate(models.Model):
         else:
             if self.software.id == self.target_software.id:
                 raise Exception("Software and it's target are the same")
-            if self.software.area_id != self.target_software.area_id:
+            if self.software.area_id != self.target_software.area.id:
                 raise Exception(
                     "Software and it's target must be from one application area"
                 )

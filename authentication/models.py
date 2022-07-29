@@ -1,6 +1,8 @@
+from tokenize import blank_re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
+from multiselectfield import MultiSelectField
 
 
 class Degree(models.Model):
@@ -10,6 +12,12 @@ class Degree(models.Model):
 
     def __str__(self):
         return self.title
+
+
+NotificationChoices = (
+    ('email', "by Email"),
+    ('sms', "by Sms")
+)
 
 
 class Account(AbstractUser):
@@ -53,6 +61,13 @@ class Account(AbstractUser):
     is_verified_phone = models.BooleanField('verified', default=False, )
     phone_otp_code = models.CharField(max_length=10, null=True, blank=True)
     phone_otp_key = models.CharField(max_length=150, blank=True, null=True,)
+
+    notification_finish_evaluation = MultiSelectField(
+        null=True,
+        blank=True,
+        choices=NotificationChoices,
+        verbose_name='Finish evaluation'
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "username", "phone_number"]

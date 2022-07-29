@@ -27,7 +27,9 @@ class MySoftwareSerializer(serializers.ModelSerializer):
         queryset=SoftwareSection.objects.all(),
         source='sections',
         many=True,
-        allow_null=True
+        allow_null=True,
+        required=False,
+        default=[]
     )
 
     class Meta:
@@ -65,7 +67,8 @@ class SoftwareSerializer(serializers.ModelSerializer):
             'description',
             'area',
             'download_link',
-            'is_active'
+            'is_active',
+            # 'evaluations'
         ]
         depth = 1
 

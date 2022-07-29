@@ -1,7 +1,8 @@
+from random import choices
 from dj_rest_auth.serializers import UserDetailsSerializer
 from dj_rest_auth.registration.serializers import RegisterSerializer
 from .models import Account
-from rest_framework import serializers
+from rest_framework import fields, serializers
 from upload.serializers import ImageSerializer
 from upload.models import Image
 from allauth.account import app_settings as allauth_settings
@@ -14,6 +15,10 @@ from phonenumber_field.validators import validate_international_phonenumber
 import requests
 from .models import Account
 import pyotp
+from .models import NotificationChoices
+
+
+NotificationChoices = (('email', "by Email"), ('sms', "by Sms"))
 
 
 class DegreeSerializer(serializers.ModelSerializer):
@@ -39,6 +44,10 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
         source='degree'
     )
 
+    notification_finish_evaluation = fields.MultipleChoiceField(
+        choices=NotificationChoices
+    )
+
     class Meta():
         model = Account
         fields = [
@@ -52,6 +61,7 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'degree_id',
             'phone_number',
             'is_verified_phone',
+            'notification_finish_evaluation'
         ]
 
 
@@ -98,12 +108,16 @@ class CustomRegisterSerializer(RegisterSerializer):
                     detail=serializers.as_serializer_error(exc)
                 )
 
-        if not sendSmsVerifyCode(user):
-            raise Exception("َAn error occurred in sending sms")
+        try:
+            if not sendSmsVerifyCode(user):
+                raise Exception("An error occurred in sending sms")
 
-        user.save()
-        self.custom_signup(request, user)
-        setup_user_email(request, user, [])
+            user.save()
+            self.custom_signup(request, user)
+            setup_user_email(request, user, [])
+        except Exception as e:
+            raise Exception(e)
+
         return user
 
 

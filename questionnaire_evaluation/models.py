@@ -53,3 +53,47 @@ class QuestionnaireEvaluate(models.Model):
     )
     created_datetime = models.DateTimeField(auto_now=True)
     modified_datetime = models.DateTimeField(auto_now=True)
+
+
+# ***
+
+
+class QuestionnaireQuestion(models.Model):
+    question = models.CharField(max_length=512, blank=True)
+    parameter = models.ForeignKey(
+        QuestionnaireParameter,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    created_datetime = models.DateTimeField(auto_now_add=True)
+    modified_datetime = models.DateTimeField(auto_now=True)
+
+
+class QuestionnaireEvaluateValue(models.Model):
+    question = models.ForeignKey(
+        QuestionnaireQuestion,
+        on_delete=models.CASCADE,
+        null=False,
+    )
+    answer = models.PositiveIntegerField(null=False, blank=False,)
+
+
+class QuestionnaireEvaluateResult(models.Model):
+    evaluate = models.ForeignKey(
+        QuestionnaireEvaluate,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    result = models.ManyToManyField(QuestionnaireEvaluateValue, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    evaluated_by = models.ForeignKey(
+        "authentication.Account",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+
+    class Meta:
+        ordering = ['-id']

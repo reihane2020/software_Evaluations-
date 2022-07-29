@@ -40,11 +40,21 @@ class _UserAdmin(UserAdmin):
         }
     ]
 
+    notifications = [
+        "Notifications",
+        {
+            "fields": (
+                "notification_finish_evaluation",
+            )
+        }
+    ]
+
     fieldsets = [
         UserAdmin.fieldsets[0],
         personalInfo,
         permissions,
-        date
+        date,
+        notifications,
     ]
 
     # fieldsets = UserAdmin.fieldsets

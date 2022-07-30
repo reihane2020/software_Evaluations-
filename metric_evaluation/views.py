@@ -49,22 +49,25 @@ class MetricEvaluateViewSet(viewsets.ModelViewSet):
 
 # ****
 
-class MetricEvaluationViewSet(viewsets.ReadOnlyModelViewSet):
+class MetricEvaluationViewSet(viewsets.ModelViewSet):
     serializer_class = MetricEvaluationSerializer
     queryset = MetricEvaluate.objects.all()
     filterset_fields = ['software']
 
-
-class MetricEvaluateValueViewSet(viewsets.ModelViewSet):
-    serializer_class = MetricEvaluateValueSerializer
-    queryset = MetricEvaluateValue.objects.all()
-
     def perform_create(self, serializer):
-        mm = serializer.save()
         result, created = MetricEvaluateResult.objects.get_or_create(
             evaluate=MetricEvaluate.objects.get(
                 id=self.request.data['evaluate_id']
             ),
             evaluated_by=self.request.user,
         )
-        result.values.add(mm)
+        final = self.request.data['data']
+        for my in final:
+            if my['id'] == None:
+                mm = MetricEvaluateValue.objects.create(
+                    parameter=MetricParameter.objects.get(
+                        id=my['parameter']
+                    ),
+                    value=my['value'],
+                )
+                result.values.add(mm)

@@ -40,14 +40,11 @@ class RatingEvaluationSerializer(serializers.ModelSerializer):
                     evaluate=obj.id
                 )
                 ser = RatingEvaluateResultSerializer(
-                    RatingEvaluateResult,
-                    eval,
+                    data=eval,
                     many=True
                 )
                 ser.is_valid()
                 return ser.data[0]
-            except RatingEvaluateResult.DoesNotExist:
-                return None
             except:
                 return None
         return None

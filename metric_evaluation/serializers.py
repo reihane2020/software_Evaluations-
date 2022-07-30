@@ -28,6 +28,7 @@ class MetricEvaluateSerializer(serializers.ModelSerializer):
             'is_active',
         ]
 
+
 # ******
 
 
@@ -61,14 +62,11 @@ class MetricEvaluationSerializer(serializers.ModelSerializer):
                     evaluate=obj.id
                 )
                 ser = MetricEvaluateResultSerializer(
-                    MetricEvaluateResult,
-                    eval,
+                    data=eval,
                     many=True
                 )
                 ser.is_valid()
                 return ser.data[0]['values']
-            except MetricEvaluateResult.DoesNotExist:
-                return []
             except:
                 return []
         return []

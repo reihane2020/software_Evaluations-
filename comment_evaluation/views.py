@@ -37,20 +37,19 @@ class CommentEvaluateViewSet(viewsets.ModelViewSet):
 # ****
 
 
-class CommentEvaluationViewSet(viewsets.ReadOnlyModelViewSet):
+class CommentEvaluationViewSet(viewsets.ModelViewSet):
     serializer_class = CommentEvaluationSerializer
     queryset = CommentEvaluate.objects.all()
     filterset_fields = ['software']
 
-
-class CommentEvaluateValueViewSet(viewsets.ModelViewSet):
-    serializer_class = CommentEvaluateResultSerializer
-    queryset = CommentEvaluateResult.objects.all()
-
     def perform_create(self, serializer):
-        serializer.save(
-            evaluated_by=self.request.user,
+        result, created = CommentEvaluateResult.objects.get_or_create(
             evaluate=CommentEvaluate.objects.get(
                 id=self.request.data['evaluate_id']
             ),
+            evaluated_by=self.request.user,
         )
+        my = self.request.data['data']
+        if my['id'] == None:
+            result.comment = my['comment']
+            result.save()

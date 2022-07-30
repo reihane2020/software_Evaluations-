@@ -1,3 +1,4 @@
+from requests import request
 from .models import *
 from .serializers import *
 from rest_framework import viewsets, permissions
@@ -43,3 +44,35 @@ class QuestionnaireEvaluateViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.data['max'] = 100
         return super().create(request, *args, **kwargs)
+
+
+# ****
+
+class QuestionnaireQuestionViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = QuestionnaireQuestionSerializer
+    queryset = QuestionnaireQuestion.objects.all()
+    filterset_fields = ['parameter']
+
+
+class QuestionnaireEvaluationViewSet(viewsets.ModelViewSet):
+    serializer_class = QuestionnaireEvaluationSerializer
+    queryset = QuestionnaireEvaluate.objects.all()
+    filterset_fields = ['software']
+
+    def perform_create(self, serializer):
+        result, created = QuestionnaireEvaluateResult.objects.get_or_create(
+            evaluate=QuestionnaireEvaluate.objects.get(
+                id=self.request.data['evaluate_id']
+            ),
+            evaluated_by=self.request.user,
+        )
+        final = self.request.data['data']
+        for my in final:
+            if my['id'] == None:
+                mm = QuestionnaireEvaluateValue.objects.create(
+                    question=QuestionnaireQuestion.objects.get(
+                        id=my['question']
+                    ),
+                    answer=my['answer'],
+                )
+                result.result.add(mm)

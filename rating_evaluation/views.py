@@ -36,20 +36,19 @@ class RatingEvaluateViewSet(viewsets.ModelViewSet):
 
 # ****
 
-class RatingEvaluationViewSet(viewsets.ReadOnlyModelViewSet):
+class RatingEvaluationViewSet(viewsets.ModelViewSet):
     serializer_class = RatingEvaluationSerializer
     queryset = RatingEvaluate.objects.all()
     filterset_fields = ['software']
 
-
-class RatingEvaluateValueViewSet(viewsets.ModelViewSet):
-    serializer_class = RatingEvaluateResultSerializer
-    queryset = RatingEvaluateResult.objects.all()
-
     def perform_create(self, serializer):
-        serializer.save(
-            evaluated_by=self.request.user,
+        result, created = RatingEvaluateResult.objects.get_or_create(
             evaluate=RatingEvaluate.objects.get(
                 id=self.request.data['evaluate_id']
             ),
+            evaluated_by=self.request.user,
         )
+        my = self.request.data['data']
+        if my['id'] == None:
+            result.rating = my['rating']
+            result.save()

@@ -41,14 +41,11 @@ class CommentEvaluationSerializer(serializers.ModelSerializer):
                     evaluate=obj.id
                 )
                 ser = CommentEvaluateResultSerializer(
-                    CommentEvaluateResult,
-                    eval,
+                    data=eval,
                     many=True
                 )
                 ser.is_valid()
                 return ser.data[0]
-            except CommentEvaluateResult.DoesNotExist:
-                return None
             except:
                 return None
         return None

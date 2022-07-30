@@ -18,9 +18,6 @@ import pyotp
 from .models import NotificationChoices
 
 
-NotificationChoices = (('email', "by Email"), ('sms', "by Sms"))
-
-
 class DegreeSerializer(serializers.ModelSerializer):
 
     class Meta:

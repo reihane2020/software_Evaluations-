@@ -1,8 +1,9 @@
 from pkg_resources import require
 from .models import *
-from rest_framework import serializers
+from rest_framework import fields, serializers
 from upload.serializers import ImageSerializer
 from upload.models import Image
+from .models import EvaluationChoices
 
 
 class SoftwareAreaSerializer(serializers.ModelSerializer):
@@ -32,6 +33,10 @@ class MySoftwareSerializer(serializers.ModelSerializer):
         default=[]
     )
 
+    evaluations = fields.MultipleChoiceField(
+        choices=EvaluationChoices
+    )
+
     class Meta:
         model = Software
         fields = [
@@ -49,13 +54,18 @@ class MySoftwareSerializer(serializers.ModelSerializer):
             'area',
             'area_id',
             'download_link',
-            'is_active'
+            'is_active',
+            'evaluations'
         ]
         depth = 1
 
 
 class SoftwareSerializer(serializers.ModelSerializer):
     logo = ImageSerializer(read_only=True)
+
+    evaluations = fields.MultipleChoiceField(
+        choices=EvaluationChoices
+    )
 
     class Meta:
         model = Software
@@ -68,7 +78,7 @@ class SoftwareSerializer(serializers.ModelSerializer):
             'area',
             'download_link',
             'is_active',
-            # 'evaluations'
+            'evaluations'
         ]
         depth = 1
 

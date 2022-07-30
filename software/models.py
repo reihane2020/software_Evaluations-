@@ -1,4 +1,5 @@
 from django.db import models
+from multiselectfield import MultiSelectField
 
 # Create your models here.
 
@@ -17,6 +18,15 @@ class SoftwareSection(models.Model):
 
     def __str__(self):
         return self.title
+
+
+EvaluationChoices = (
+    ('metric', "Metric"),
+    ('comment', "Comment"),
+    ('rating', "Rating"),
+    ('compare', "Compare"),
+    ('questionnaire', "Questionnaire"),
+)
 
 
 class Software(models.Model):
@@ -39,6 +49,13 @@ class Software(models.Model):
     download_link = models.CharField(max_length=1000)
     description = models.TextField()
     is_active = models.BooleanField(default=True)
+
+    evaluations = MultiSelectField(
+        null=True,
+        blank=True,
+        choices=EvaluationChoices,
+        verbose_name='Evaluations'
+    )
 
     def __str__(self):
         return self.name

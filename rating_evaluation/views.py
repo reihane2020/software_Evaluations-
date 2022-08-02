@@ -5,6 +5,8 @@ from software.models import Software
 from datetime import date, timedelta
 from setting.models import Setting
 from rest_framework.exceptions import APIException
+from django.db.models import F
+
 # Create your views here.
 
 
@@ -91,7 +93,12 @@ class RatingEvaluateViewSet(viewsets.ModelViewSet):
 
 class RatingEvaluationViewSet(viewsets.ModelViewSet):
     serializer_class = RatingEvaluationSerializer
-    queryset = RatingEvaluate.objects.all()
+    queryset = RatingEvaluate.objects.filter(
+        is_active=True,
+        publish=True,
+        max__gt=F('evaluates'),
+        deadline__gt=date.today()
+    )
     filterset_fields = ['software']
 
     def perform_create(self, serializer):

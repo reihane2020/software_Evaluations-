@@ -5,6 +5,7 @@ from software.models import Software
 from datetime import date, timedelta
 from setting.models import Setting
 from rest_framework.exceptions import APIException
+from django.db.models import F
 
 # Create your views here.
 

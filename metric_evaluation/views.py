@@ -5,6 +5,7 @@ from software.models import Software
 from datetime import date, timedelta
 from setting.models import Setting
 from rest_framework.exceptions import APIException
+from django.db.models import F
 
 # Create your views here.
 
@@ -103,7 +104,12 @@ class MetricEvaluateViewSet(viewsets.ModelViewSet):
 
 class MetricEvaluationViewSet(viewsets.ModelViewSet):
     serializer_class = MetricEvaluationSerializer
-    queryset = MetricEvaluate.objects.all()
+    queryset = MetricEvaluate.objects.filter(
+        is_active=True,
+        publish=True,
+        max__gt=F('evaluates'),
+        deadline__gt=date.today()
+    )
     filterset_fields = ['software']
 
     def perform_create(self, serializer):

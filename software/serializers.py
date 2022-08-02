@@ -1,9 +1,16 @@
-from pkg_resources import require
 from .models import *
 from rest_framework import fields, serializers
 from upload.serializers import ImageSerializer
 from upload.models import Image
-from .models import EvaluationChoices
+from datetime import date
+from django.db.models import F
+
+
+from metric_evaluation.models import MetricEvaluate
+from comment_evaluation.models import CommentEvaluate
+from rating_evaluation.models import RatingEvaluate
+from compare_evaluation.models import CompareEvaluate
+from questionnaire_evaluation.models import QuestionnaireEvaluate
 
 
 class SoftwareAreaSerializer(serializers.ModelSerializer):
@@ -33,10 +40,6 @@ class MySoftwareSerializer(serializers.ModelSerializer):
         default=[]
     )
 
-    evaluations = fields.MultipleChoiceField(
-        choices=EvaluationChoices
-    )
-
     class Meta:
         model = Software
         fields = [
@@ -63,10 +66,6 @@ class MySoftwareSerializer(serializers.ModelSerializer):
 class SoftwareSerializer(serializers.ModelSerializer):
     logo = ImageSerializer(read_only=True)
 
-    evaluations = fields.MultipleChoiceField(
-        choices=EvaluationChoices
-    )
-
     class Meta:
         model = Software
         fields = [
@@ -79,6 +78,16 @@ class SoftwareSerializer(serializers.ModelSerializer):
             'download_link',
             'is_active',
             'evaluations'
+        ]
+        depth = 1
+
+
+class TargetSoftwareSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Software
+        fields = [
+            'id',
+            'name',
         ]
         depth = 1
 

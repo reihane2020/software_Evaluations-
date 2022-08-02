@@ -6,4 +6,4 @@ class SettingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Setting
-        fields = ['terms']
+        fields = ['terms', 'evaluation_days']

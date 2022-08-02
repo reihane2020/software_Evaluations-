@@ -1,8 +1,8 @@
+
+
 def custom_exception_handler(exc, context):
     from rest_framework.views import exception_handler
     from rest_framework.response import Response
-    from pprint import pprint
-    from django.http.response import Http404
 
     response = exception_handler(exc, context)
 

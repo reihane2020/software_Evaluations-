@@ -1,4 +1,4 @@
-from tokenize import blank_re
+from email.policy import default
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
@@ -18,6 +18,16 @@ NotificationChoices = (
     ('email', "by Email"),
     ('sms', "by Sms")
 )
+
+EvaluationChoices = (
+    ('metric', "Metric"),
+    ('comment', "Comment"),
+    ('rating', "Rating"),
+    ('compare', "Compare"),
+    ('questionnaire', "Questionnaire"),
+)
+
+AllEvaluation = ['metric', 'comment', 'rating', 'compare', 'questionnaire']
 
 
 class Account(AbstractUser):
@@ -66,7 +76,16 @@ class Account(AbstractUser):
         null=True,
         blank=True,
         choices=NotificationChoices,
-        verbose_name='Finish evaluation'
+        verbose_name='Finish evaluation',
+        default=['email']
+    )
+
+    can_publish_evaluation = MultiSelectField(
+        null=True,
+        blank=True,
+        choices=EvaluationChoices,
+        verbose_name='Publish evaluation',
+        default=AllEvaluation
     )
 
     USERNAME_FIELD = "email"

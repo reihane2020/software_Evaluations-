@@ -1,5 +1,6 @@
 from django.db import models
-
+from datetime import date
+from django.utils import timezone
 # Create your models here.
 
 
@@ -40,14 +41,21 @@ class MetricEvaluate(models.Model):
         blank=False,
         null=False
     )
-    max = models.PositiveSmallIntegerField(blank=False, null=False)
+    max = models.PositiveSmallIntegerField(
+        blank=True, null=True, default=500
+    )
     is_active = models.BooleanField(default=True)
+    publish = models.BooleanField(default=False)
     created_by = models.ForeignKey(
         "authentication.Account",
         on_delete=models.CASCADE,
         blank=False,
         null=False
     )
+    deadline = models.DateField(default=date.today)
+    evaluates = models.PositiveSmallIntegerField(default=0)
+    published_datetime = models.DateTimeField(default=timezone.now)
+    completed_datetime = models.DateTimeField(default=timezone.now)
     created_datetime = models.DateTimeField(auto_now_add=True)
     modified_datetime = models.DateTimeField(auto_now=True)
 

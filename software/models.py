@@ -1,6 +1,13 @@
 from django.db import models
-from multiselectfield import MultiSelectField
+from datetime import date
+from django.db.models import F
 
+
+from metric_evaluation.models import MetricEvaluate
+from comment_evaluation.models import CommentEvaluate
+from rating_evaluation.models import RatingEvaluate
+from compare_evaluation.models import CompareEvaluate
+from questionnaire_evaluation.models import QuestionnaireEvaluate
 # Create your models here.
 
 
@@ -18,15 +25,6 @@ class SoftwareSection(models.Model):
 
     def __str__(self):
         return self.title
-
-
-EvaluationChoices = (
-    ('metric', "Metric"),
-    ('comment', "Comment"),
-    ('rating', "Rating"),
-    ('compare', "Compare"),
-    ('questionnaire', "Questionnaire"),
-)
 
 
 class Software(models.Model):
@@ -50,12 +48,51 @@ class Software(models.Model):
     description = models.TextField()
     is_active = models.BooleanField(default=True)
 
-    evaluations = MultiSelectField(
-        null=True,
-        blank=True,
-        choices=EvaluationChoices,
-        verbose_name='Evaluations'
-    )
+    # @property
+    # def rasoul(self):
+    #     instance = self
+    #     qs = ["MMMM"]
+    #     return qs
+
+    @property
+    def evaluations(self):
+
+        items = []
+
+        t = MetricEvaluate.objects.filter(
+            software=self.pk, is_active=True, publish=True, max__gt=F('evaluates'), deadline__gt=date.today()
+        )
+        if t.count() > 0:
+            items.append('metric')
+
+        t = CommentEvaluate.objects.filter(
+            software=self.pk, is_active=True, publish=True, max__gt=F('evaluates'), deadline__gt=date.today()
+        )
+        if t.count() > 0:
+            items.append('comment')
+
+        t = RatingEvaluate.objects.filter(
+            software=self.pk, is_active=True, publish=True, max__gt=F('evaluates'), deadline__gt=date.today()
+        )
+        if t.count() > 0:
+            items.append('rating')
+
+        t = CompareEvaluate.objects.filter(
+            software=self.pk, is_active=True, publish=True, max__gt=F('evaluates'), deadline__gt=date.today()
+        )
+        if t.count() > 0:
+            items.append('compare')
+
+        t = QuestionnaireEvaluate.objects.filter(
+            software=self.pk, is_active=True, publish=True, max__gt=F('evaluates'), deadline__gt=date.today()
+        )
+        if t.count() > 0:
+            items.append('questionnaire')
+
+        return items
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        ordering = ('-is_active', 'name',)

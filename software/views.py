@@ -2,6 +2,8 @@ from .models import *
 from .serializers import *
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
+from rest_framework.exceptions import APIException
+
 # Create your views here.
 
 
@@ -18,15 +20,14 @@ class HasPermissions(permissions.BasePermission):
 class MySoftwareViewSet(viewsets.ModelViewSet):
     serializer_class = MySoftwareSerializer
     pagination_class = None
-    queryset = Software.objects.filter(is_active=True)
-    filterset_fields = ['created_by', 'name', 'area']
+    queryset = Software.objects.all()
+    filterset_fields = ['name', 'area']
     permission_classes = [permissions.IsAuthenticated, HasPermissions]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(
             Software.objects.filter(
                 created_by=self.request.user,
-                is_active=True
             )
         )
         serializer = self.get_serializer(queryset, many=True)
@@ -43,8 +44,33 @@ class MySoftwareViewSet(viewsets.ModelViewSet):
 class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SoftwareSerializer
     pagination_class = None
+    queryset = Software.objects.filter(
+        is_active=True,
+    )
+
+    def list(self, request, *args, **kwargs):
+        data = []
+        for qs in self.queryset:
+            if len(qs.evaluations) > 0:
+                data.append(qs)
+
+        self.queryset = data
+        return super().list(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        if len(self.get_object().evaluations) == 0:
+            raise APIException(
+                code="NO_AVAILABLE_EVALUATION",
+                detail="This software has no evaluation or expired"
+            )
+        return super().retrieve(request, *args, **kwargs)
+
+
+class TargetSoftwareViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = TargetSoftwareSerializer
+    pagination_class = None
     queryset = Software.objects.filter(is_active=True)
-    filterset_fields = ['created_by', 'name', 'area']
+    filterset_fields = ['area']
 
 
 class SoftwareSectionViewSet(viewsets.ModelViewSet):

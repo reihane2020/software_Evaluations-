@@ -26,6 +26,11 @@ class MetricEvaluateSerializer(serializers.ModelSerializer):
             'parameters',
             'max',
             'is_active',
+            'deadline',
+            'publish',
+            'evaluates',
+            'published_datetime',
+            'completed_datetime',
         ]
 
 

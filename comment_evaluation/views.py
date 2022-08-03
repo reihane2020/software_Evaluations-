@@ -105,16 +105,21 @@ class CommentEvaluationViewSet(viewsets.ModelViewSet):
     filterset_fields = ['software']
 
     def perform_create(self, serializer):
+        ev = CommentEvaluate.objects.get(
+            id=self.request.data['evaluate_id']
+        )
         result, created = CommentEvaluateResult.objects.get_or_create(
-            evaluate=CommentEvaluate.objects.get(
-                id=self.request.data['evaluate_id']
-            ),
+            evaluate=ev,
             evaluated_by=self.request.user,
         )
         my = self.request.data['data']
         if my['id'] == None:
             result.comment = my['comment']
             result.save()
+
+        if created:
+            ev.evaluates = ev.evaluates + 1
+            ev.save()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

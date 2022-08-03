@@ -121,10 +121,11 @@ class QuestionnaireEvaluationViewSet(viewsets.ModelViewSet):
     filterset_fields = ['software']
 
     def perform_create(self, serializer):
+        ev = QuestionnaireEvaluate.objects.get(
+            id=self.request.data['evaluate_id']
+        )
         result, created = QuestionnaireEvaluateResult.objects.get_or_create(
-            evaluate=QuestionnaireEvaluate.objects.get(
-                id=self.request.data['evaluate_id']
-            ),
+            evaluate=ev,
             evaluated_by=self.request.user,
         )
         final = self.request.data['data']
@@ -137,6 +138,10 @@ class QuestionnaireEvaluationViewSet(viewsets.ModelViewSet):
                     answer=my['answer'],
                 )
                 result.result.add(mm)
+
+        if created:
+            ev.evaluates = ev.evaluates + 1
+            ev.save()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

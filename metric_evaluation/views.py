@@ -114,10 +114,11 @@ class MetricEvaluationViewSet(viewsets.ModelViewSet):
     filterset_fields = ['software']
 
     def perform_create(self, serializer):
+        ev = MetricEvaluate.objects.get(
+            id=self.request.data['evaluate_id']
+        )
         result, created = MetricEvaluateResult.objects.get_or_create(
-            evaluate=MetricEvaluate.objects.get(
-                id=self.request.data['evaluate_id']
-            ),
+            evaluate=ev,
             evaluated_by=self.request.user,
         )
         final = self.request.data['data']
@@ -130,6 +131,9 @@ class MetricEvaluationViewSet(viewsets.ModelViewSet):
                     value=my['value'],
                 )
                 result.result.add(mm)
+        if created:
+            ev.evaluates = ev.evaluates + 1
+            ev.save()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

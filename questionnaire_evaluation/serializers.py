@@ -54,7 +54,7 @@ class QuestionnaireEvaluateResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionnaireEvaluateResult
-        fields = ['result']
+        fields = ['id', 'result']
 
 
 class QuestionnaireEvaluationSerializer(serializers.ModelSerializer):
@@ -77,10 +77,10 @@ class QuestionnaireEvaluationSerializer(serializers.ModelSerializer):
                     many=True
                 )
                 ser.is_valid()
-                return ser.data[0]['result']
+                return ser.data[0]
             except:
-                return []
-        return []
+                return {}
+        return {}
 
     class Meta:
         model = QuestionnaireEvaluate

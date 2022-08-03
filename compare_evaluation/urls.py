@@ -4,6 +4,9 @@ from .views import *
 
 router = routers.DefaultRouter()
 
+
+router.register(r'evaluation', CompareEvaluationViewSet)
 router.register(r'', CompareEvaluateViewSet)
+
 
 urlpatterns = router.urls

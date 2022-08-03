@@ -6,6 +6,9 @@ from datetime import date, timedelta
 from setting.models import Setting
 from rest_framework.exceptions import APIException
 from django.db.models import F
+from metric_evaluation.models import MetricParameter
+from rest_framework.response import Response
+from rest_framework import status
 
 # Create your views here.
 
@@ -87,3 +90,42 @@ class CompareEvaluateViewSet(viewsets.ModelViewSet):
             )
 
         return super().perform_update(serializer)
+
+
+# ****
+
+class CompareEvaluationViewSet(viewsets.ModelViewSet):
+    serializer_class = CompareEvaluationSerializer
+    queryset = CompareEvaluate.objects.filter(
+        is_active=True,
+        publish=True,
+        max__gt=F('evaluates'),
+        deadline__gt=date.today()
+    )
+    filterset_fields = ['software']
+
+    def perform_create(self, serializer):
+        result, created = CompareEvaluateResult.objects.get_or_create(
+            evaluate=CompareEvaluate.objects.get(
+                id=self.request.data['evaluate_id']
+            ),
+            evaluated_by=self.request.user,
+        )
+        final = self.request.data['data']
+        for my in final:
+            if my['id'] == None:
+                mm = CompareEvaluateValue.objects.create(
+                    parameter=MetricParameter.objects.get(
+                        id=my['parameter']
+                    ),
+                    main=my['main'],
+                    target=my['target'],
+                )
+                result.result.add(mm)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(True, status=status.HTTP_201_CREATED, headers=headers)

@@ -67,6 +67,7 @@ class MetricEvaluateValue(models.Model):
         MetricParameter,
         on_delete=models.CASCADE,
         null=False,
+        blank=False,
     )
     value = models.PositiveIntegerField(null=False, blank=False,)
 
@@ -78,7 +79,7 @@ class MetricEvaluateResult(models.Model):
         blank=False,
         null=False
     )
-    values = models.ManyToManyField(MetricEvaluateValue, blank=True)
+    result = models.ManyToManyField(MetricEvaluateValue, blank=True)
     datetime = models.DateTimeField(auto_now_add=True)
     evaluated_by = models.ForeignKey(
         "authentication.Account",

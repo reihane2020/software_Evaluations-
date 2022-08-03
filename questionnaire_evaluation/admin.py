@@ -9,4 +9,4 @@ admin.site.register(QuestionnaireParameter)
 
 admin.site.register(QuestionnaireQuestion)
 admin.site.register(QuestionnaireEvaluateResult)
-admin.site.register(QuestionnaireEvaluateValue)
+

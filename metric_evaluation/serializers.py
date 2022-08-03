@@ -44,11 +44,11 @@ class MetricEvaluateValueSerializer(serializers.ModelSerializer):
 
 
 class MetricEvaluateResultSerializer(serializers.ModelSerializer):
-    values = MetricEvaluateValueSerializer(read_only=True, many=True)
+    result = MetricEvaluateValueSerializer(read_only=True, many=True)
 
     class Meta:
         model = MetricEvaluateResult
-        fields = ['values']
+        fields = ['id', 'result']
 
 
 class MetricEvaluationSerializer(serializers.ModelSerializer):
@@ -71,10 +71,10 @@ class MetricEvaluationSerializer(serializers.ModelSerializer):
                     many=True
                 )
                 ser.is_valid()
-                return ser.data[0]['values']
+                return ser.data[0]
             except:
-                return []
-        return []
+                return {}
+        return {}
 
     class Meta:
         model = MetricEvaluate

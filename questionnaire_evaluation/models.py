@@ -81,6 +81,7 @@ class QuestionnaireEvaluateValue(models.Model):
         QuestionnaireQuestion,
         on_delete=models.CASCADE,
         null=False,
+        blank=False,
     )
     answer = models.PositiveIntegerField(null=False, blank=False,)
 

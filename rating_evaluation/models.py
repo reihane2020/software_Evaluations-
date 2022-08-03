@@ -57,7 +57,7 @@ class RatingEvaluateResult(models.Model):
         RatingEvaluate,
         on_delete=models.CASCADE,
         blank=False,
-        null=False
+        null=False,
     )
     rating = models.PositiveIntegerField(blank=True, null=True)
     datetime = models.DateTimeField(auto_now_add=True)

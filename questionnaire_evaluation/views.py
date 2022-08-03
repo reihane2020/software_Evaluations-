@@ -6,7 +6,8 @@ from datetime import date, timedelta
 from setting.models import Setting
 from rest_framework.exceptions import APIException
 from django.db.models import F
-
+from rest_framework.response import Response
+from rest_framework import status
 # Create your views here.
 
 
@@ -136,3 +137,10 @@ class QuestionnaireEvaluationViewSet(viewsets.ModelViewSet):
                     answer=my['answer'],
                 )
                 result.result.add(mm)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(True, status=status.HTTP_201_CREATED, headers=headers)

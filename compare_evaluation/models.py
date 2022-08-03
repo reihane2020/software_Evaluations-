@@ -59,3 +59,36 @@ class CompareEvaluate(models.Model):
                     "Software and it's target must be from one application area"
                 )
         return super().save(*args, **kwargs)
+
+
+# ******
+
+class CompareEvaluateValue(models.Model):
+    parameter = models.ForeignKey(
+        "metric_evaluation.MetricParameter",
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False,
+    )
+    main = models.PositiveIntegerField(null=False, blank=False,)
+    target = models.PositiveIntegerField(null=False, blank=False,)
+
+
+class CompareEvaluateResult(models.Model):
+    evaluate = models.ForeignKey(
+        CompareEvaluate,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+    result = models.ManyToManyField(CompareEvaluateValue, blank=True)
+    datetime = models.DateTimeField(auto_now_add=True)
+    evaluated_by = models.ForeignKey(
+        "authentication.Account",
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False
+    )
+
+    class Meta:
+        ordering = ['-id']

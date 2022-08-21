@@ -49,13 +49,15 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
     def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+
         data = []
-        for qs in self.queryset:
-            if len(qs.evaluations) > 0:
+        for qs in serializer.data:
+            if len(qs['evaluations']) > 0:
                 data.append(qs)
 
-        self.queryset = data
-        return super().list(request, *args, **kwargs)
+        return Response(data)
 
     def retrieve(self, request, *args, **kwargs):
         if len(self.get_object().evaluations) == 0:

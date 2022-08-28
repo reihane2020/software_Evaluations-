@@ -1,3 +1,5 @@
+from itertools import count
+from logging import exception
 from .models import *
 from .serializers import *
 from rest_framework import viewsets, permissions
@@ -141,3 +143,11 @@ class MetricEvaluationViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(True, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class MetricResultViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = MetricResultSerializer
+    queryset = MetricEvaluate.objects.filter(
+        publish=True,
+    )
+    filterset_fields = ['software']

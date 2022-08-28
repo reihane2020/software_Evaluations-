@@ -76,3 +76,67 @@ class CompareEvaluationSerializer(serializers.ModelSerializer):
             'parameters',
             'user_data'
         ]
+
+
+# ***
+
+
+class CompareEvaluateForResultSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CompareEvaluateResult
+        fields = ['id', 'result', 'evaluated_by']
+        depth = 2
+
+
+class CompareResultSerializer(serializers.ModelSerializer):
+
+    by_degree = serializers.SerializerMethodField("byDegreeData")
+    # by_parameter = serializers.SerializerMethodField("byParameterData")
+
+    def byDegreeData(self, obj):
+        cc = CompareEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = CompareEvaluateForResultSerializer(cc, many=True)
+        data = []
+        for d in ss.data:
+            deg = d['evaluated_by']['degree']
+            if deg:
+                data.append(deg['title'])
+            else:
+                data.append("Unknown")
+        return data
+
+    # def byParameterData(self, obj):
+    #     cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
+    #     ss = CommentEvaluateForResultSerializer(cc, many=True)
+    #     data = {}
+    #     for d in ss.data:
+    #         res = d['result']
+    #         for r in res:
+    #             try:
+    #                 if data[r['parameter']['id']]:
+    #                     data[r['parameter']['id']]['data'].append(r['value'])
+    #             except:
+    #                 data[r['parameter']['id']] = {
+    #                     'name': r['parameter']['title'],
+    #                     'data': [r['value']]
+    #                 }
+    #     return data
+
+    class Meta:
+        model = CompareEvaluate
+        fields = [
+            'id',
+            'category',
+            'parameters',
+            'completed_datetime',
+            'created_datetime',
+            'published_datetime',
+            'deadline',
+            'evaluates',
+            'max',
+            'is_active',
+            'by_degree',
+            # 'by_parameter'
+        ]
+        depth = 1

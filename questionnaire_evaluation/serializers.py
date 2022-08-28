@@ -91,3 +91,77 @@ class QuestionnaireEvaluationSerializer(serializers.ModelSerializer):
             'parameters',
             'user_data'
         ]
+
+
+# ***
+
+
+class QuestionnaireEvaluateForResultSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionnaireEvaluateResult
+        fields = ['id', 'result', 'evaluated_by']
+        depth = 3
+
+
+class QuestionnaireResultSerializer(serializers.ModelSerializer):
+
+    by_degree = serializers.SerializerMethodField("byDegreeData")
+    by_parameter = serializers.SerializerMethodField("byParameterData")
+
+    def byDegreeData(self, obj):
+        cc = QuestionnaireEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = QuestionnaireEvaluateForResultSerializer(cc, many=True)
+        data = []
+        for d in ss.data:
+            deg = d['evaluated_by']['degree']
+            if deg:
+                data.append(deg['title'])
+            else:
+                data.append("Unknown")
+        return data
+
+    def byParameterData(self, obj):
+        cc = QuestionnaireEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = QuestionnaireEvaluateForResultSerializer(cc, many=True)
+        data = {}
+        for d in ss.data:
+            res = d['result']
+            for r in res:
+                print(r)
+                p = r['question']['parameter']['id']
+                q = r['question']['id']
+                ptitle = r['question']['parameter']['title']
+                qtitle = r['question']['question']
+                try:
+                    if data[p]:
+                        data[p]['questions'][q]['data'].append(r['answer'])
+                except:
+                    data[p] = {
+                        'name': ptitle,
+                        'questions': {
+                            q: {
+                                'title': qtitle,
+                                'data': [r['answer']]
+                            }
+                        }
+                    }
+        return data
+
+    class Meta:
+        model = QuestionnaireEvaluate
+        fields = [
+            'id',
+            'category',
+            'parameters',
+            'completed_datetime',
+            'created_datetime',
+            'published_datetime',
+            'deadline',
+            'evaluates',
+            'max',
+            'is_active',
+            'by_degree',
+            'by_parameter'
+        ]
+        depth = 1

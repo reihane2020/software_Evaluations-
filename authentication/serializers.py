@@ -23,7 +23,6 @@ class DegreeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Degree
         fields = ['id', 'title']
-    depth = 1
 
 
 class CustomUserDetailSerializer(UserDetailsSerializer):
@@ -58,7 +57,23 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'degree_id',
             'phone_number',
             'is_verified_phone',
-            'notification_finish_evaluation'
+            'notification_finish_evaluation',
+            'user_level'
+        ]
+
+
+class UserDataEvaluateResultSerializer(UserDetailsSerializer):
+
+    degree = DegreeSerializer(read_only=True)
+
+    class Meta():
+        model = Account
+        fields = [
+            'email',
+            'username',
+            'first_name',
+            'last_name',
+            'degree',
         ]
 
 

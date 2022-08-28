@@ -62,3 +62,66 @@ class RatingEvaluationSerializer(serializers.ModelSerializer):
             'section',
             'user_data'
         ]
+
+
+# ***
+
+
+class RatingEvaluateForResultSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RatingEvaluateResult
+        fields = ['id', 'rating', 'evaluated_by']
+        depth = 2
+
+
+class RatingResultSerializer(serializers.ModelSerializer):
+
+    by_degree = serializers.SerializerMethodField("byDegreeData")
+    # by_parameter = serializers.SerializerMethodField("byParameterData")
+
+    def byDegreeData(self, obj):
+        cc = RatingEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = RatingEvaluateForResultSerializer(cc, many=True)
+        data = []
+        for d in ss.data:
+            deg = d['evaluated_by']['degree']
+            if deg:
+                data.append(deg['title'])
+            else:
+                data.append("Unknown")
+        return data
+
+    # def byParameterData(self, obj):
+    #     cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
+    #     ss = CommentEvaluateForResultSerializer(cc, many=True)
+    #     data = {}
+    #     for d in ss.data:
+    #         res = d['result']
+    #         for r in res:
+    #             try:
+    #                 if data[r['parameter']['id']]:
+    #                     data[r['parameter']['id']]['data'].append(r['value'])
+    #             except:
+    #                 data[r['parameter']['id']] = {
+    #                     'name': r['parameter']['title'],
+    #                     'data': [r['value']]
+    #                 }
+    #     return data
+
+    class Meta:
+        model = RatingEvaluate
+        fields = [
+            'id',
+            'section',
+            'completed_datetime',
+            'created_datetime',
+            'published_datetime',
+            'deadline',
+            'evaluates',
+            'max',
+            'is_active',
+            'by_degree',
+            # 'by_parameter'
+        ]
+        depth = 1

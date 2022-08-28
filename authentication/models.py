@@ -29,6 +29,12 @@ EvaluationChoices = (
 
 AllEvaluation = ['metric', 'comment', 'rating', 'compare', 'questionnaire']
 
+UserLevels = (
+    ('level1', 'Level 1'),  # just view
+    ('level2', 'Level 2'),  # can evaluate
+    ('level3', 'Level 3'),  # can add software
+)
+
 
 class Account(AbstractUser):
 
@@ -86,6 +92,10 @@ class Account(AbstractUser):
         choices=EvaluationChoices,
         verbose_name='Publish evaluation',
         default=AllEvaluation
+    )
+
+    user_level = models.CharField(
+        max_length=100, choices=UserLevels, default='level1'
     )
 
     USERNAME_FIELD = "email"

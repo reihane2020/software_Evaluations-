@@ -6,6 +6,7 @@ router = routers.DefaultRouter()
 
 
 router.register(r'evaluation', CompareEvaluationViewSet)
+router.register(r'result', CompareResultViewSet)
 router.register(r'', CompareEvaluateViewSet)
 
 

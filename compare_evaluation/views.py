@@ -134,3 +134,11 @@ class CompareEvaluationViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(True, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class CompareResultViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = CompareResultSerializer
+    queryset = CompareEvaluate.objects.filter(
+        publish=True,
+    )
+    filterset_fields = ['software']

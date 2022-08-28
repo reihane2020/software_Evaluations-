@@ -125,3 +125,11 @@ class RatingEvaluationViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(True, status=status.HTTP_201_CREATED, headers=headers)
+
+
+class RatingResultViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = RatingResultSerializer
+    queryset = RatingEvaluate.objects.filter(
+        publish=True,
+    )
+    filterset_fields = ['software']

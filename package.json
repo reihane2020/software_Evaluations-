@@ -1,6 +1,6 @@
 {
   "name": "software_evaluation_api",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "start": "python3 manage.py runserver"

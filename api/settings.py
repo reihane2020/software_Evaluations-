@@ -190,7 +190,7 @@ STATIC_URL = 'static/'
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "http://evaluation.r707.ir"
+    "https://evaluation.r707.ir"
 ]
 
 # USE_X_FORWARDED_HOST = True

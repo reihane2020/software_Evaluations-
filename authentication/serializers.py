@@ -16,6 +16,7 @@ import requests
 from .models import Account
 import pyotp
 from .models import NotificationChoices
+from setting.models import Setting
 
 
 class DegreeSerializer(serializers.ModelSerializer):
@@ -29,6 +30,9 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
 
     avatar = ImageSerializer(read_only=True)
     degree = DegreeSerializer(read_only=True)
+    document1 = ImageSerializer(read_only=True)
+    document2 = ImageSerializer(read_only=True)
+    document3 = ImageSerializer(read_only=True)
 
     avatar_id = serializers.PrimaryKeyRelatedField(
         queryset=Image.objects.all(),
@@ -36,8 +40,21 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
     )
 
     degree_id = serializers.PrimaryKeyRelatedField(
-        queryset=Degree.objects.all(),
+        queryset=Image.objects.all(),
         source='degree'
+    )
+
+    document1_id = serializers.PrimaryKeyRelatedField(
+        queryset=Image.objects.all(),
+        source='document1'
+    )
+    document2_id = serializers.PrimaryKeyRelatedField(
+        queryset=Image.objects.all(),
+        source='document2'
+    )
+    document3_id = serializers.PrimaryKeyRelatedField(
+        queryset=Image.objects.all(),
+        source='document3'
     )
 
     notification_finish_evaluation = fields.MultipleChoiceField(
@@ -58,7 +75,15 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'phone_number',
             'is_verified_phone',
             'notification_finish_evaluation',
-            'user_level'
+            'user_level',
+            'score',
+            'document1',
+            'document2',
+            'document3',
+            'document1_id',
+            'document2_id',
+            'document3_id',
+            'token',
         ]
 
 
@@ -101,6 +126,8 @@ class CustomRegisterSerializer(RegisterSerializer):
             'degree': self.validated_data.get('degree', ''),
         }
 
+
+
     def save(self, request):
         adapter = get_adapter()
         user = adapter.new_user(request)
@@ -108,6 +135,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user = adapter.save_user(request, user, self, commit=False)
         user.degree = Degree.objects.get(pk=self.cleaned_data['degree'])
         user.phone_number = self.cleaned_data['phone_number']
+        user.score = Setting.objects.get(pk=1).initial_score
 
         if "password1" in self.cleaned_data:
             try:
@@ -119,6 +147,13 @@ class CustomRegisterSerializer(RegisterSerializer):
                 raise serializers.ValidationError(
                     detail=serializers.as_serializer_error(exc)
                 )
+
+        try:
+            inviter_account = Account.objects.get(token=request.data['ref'])
+            inviter_account.score = inviter_account.score + Setting.objects.get(pk=1).referral_score
+            inviter_account.save()            
+        except:
+            pass
 
         try:
             if not sendSmsVerifyCode(user):

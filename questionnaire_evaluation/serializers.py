@@ -124,7 +124,6 @@ class QuestionnaireResultSerializer(serializers.ModelSerializer):
     def byParameterData(self, obj):
         cc = QuestionnaireEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = QuestionnaireEvaluateForResultSerializer(cc, many=True)
-        print(ss.data)
         data = {}
         for d in ss.data:
             res = d['result']

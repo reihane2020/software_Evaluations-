@@ -51,12 +51,35 @@ class _UserAdmin(UserAdmin):
         }
     ]
 
+    score = [
+        "Score",
+        {
+            "fields": (
+                "score",
+            )
+        }
+    ]
+
+    documents = [
+        "Documents",
+        {
+            "fields": (
+                "document1",
+                "document2",
+                "document3",
+                "token"
+            )
+        }
+    ]
+
     fieldsets = [
         UserAdmin.fieldsets[0],
         personalInfo,
         permissions,
         date,
         notifications,
+        score,
+        documents
     ]
 
     # fieldsets = UserAdmin.fieldsets
@@ -70,6 +93,7 @@ class _UserAdmin(UserAdmin):
         "is_active",
         "last_login",
         "date_joined",
+        "score",
     )
 
     list_editable = [

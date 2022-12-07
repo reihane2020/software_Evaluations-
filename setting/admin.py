@@ -15,12 +15,18 @@ class SettingAdmin(admin.ModelAdmin):
     list_display = [
         'terms',
         'evaluation_days',
+        'initial_score',
+        'referral_score',
+        'evaluation_score',
         'edit'
     ]
     list_display_links = ['edit']
     list_editable = [
         'terms',
         'evaluation_days',
+        'initial_score',
+        'referral_score',
+        'evaluation_score',
     ]
 
 

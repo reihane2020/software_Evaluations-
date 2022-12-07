@@ -119,6 +119,17 @@ class CommentEvaluationViewSet(viewsets.ModelViewSet):
 
         if created:
             ev.evaluates = ev.evaluates + 1
+
+
+            #### score eval
+            try:
+                self.request.user.score = self.request.user.score + Setting.objects.get(pk=1).evaluation_score
+                self.request.user.score.save()
+            except:
+                pass
+            #### score eval
+
+            
             ev.save()
 
     def create(self, request, *args, **kwargs):

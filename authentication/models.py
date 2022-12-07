@@ -3,7 +3,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from phonenumber_field.modelfields import PhoneNumberField
 from multiselectfield import MultiSelectField
+from django.utils.crypto import get_random_string
 
+
+def generateToken():
+    return get_random_string(length=16)
 
 class Degree(models.Model):
     title = models.CharField(max_length=254, blank=False, null=False)
@@ -65,7 +69,7 @@ class Account(AbstractUser):
     )
 
     avatar = models.ForeignKey(
-        "upload.Image", on_delete=models.SET_NULL, blank=True, null=True
+        "upload.Image", on_delete=models.SET_NULL, blank=True, null=True, related_name="avatar"
     )
 
     degree = models.ForeignKey(
@@ -99,6 +103,23 @@ class Account(AbstractUser):
     )
 
     score = models.PositiveSmallIntegerField(default=0)
+
+    document1 = models.ForeignKey("upload.Image",
+        related_name="document1",
+        on_delete=models.SET_NULL, blank=True, null=True,
+    )
+    document2 = models.ForeignKey("upload.Image",
+        related_name="document2",
+        on_delete=models.SET_NULL, blank=True, null=True,
+    )
+    document3 = models.ForeignKey("upload.Image",
+        related_name="document3",
+        on_delete=models.SET_NULL, blank=True, null=True,
+    )
+
+    token = models.CharField(
+        max_length=20, default=generateToken,
+    )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "username", "phone_number"]

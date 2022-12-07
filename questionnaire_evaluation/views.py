@@ -27,12 +27,12 @@ class HasPermissions(permissions.BasePermission):
 
 class QuestionnaireCategoryViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuestionnaireCategorySerializer
-    queryset = QuestionnaireCategory.objects.all()
+    queryset = QuestionnaireCategory.objects.filter(active=True)
 
 
 class QuestionnaireParameterViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = QuestionnaireParameterSerializer
-    queryset = QuestionnaireParameter.objects.all()
+    queryset = QuestionnaireParameter.objects.filter(active=True)
     filterset_fields = ['category']
 
 
@@ -75,8 +75,7 @@ class QuestionnaireEvaluateViewSet(viewsets.ModelViewSet):
                 )
 
             if "questionnaire" in self.request.user.can_publish_evaluation:
-                self.request.user.can_publish_evaluation.remove(
-                    "questionnaire")
+                self.request.user.can_publish_evaluation.remove("questionnaire")
                 self.request.user.save()
 
             days = Setting.objects.get(pk=1).evaluation_days
@@ -104,10 +103,58 @@ class QuestionnaireEvaluateViewSet(viewsets.ModelViewSet):
 
 # ****
 
-class QuestionnaireQuestionViewSet(viewsets.ReadOnlyModelViewSet):
+class QuestionnaireQuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionnaireQuestionSerializer
     queryset = QuestionnaireQuestion.objects.all()
     filterset_fields = ['parameter']
+
+    def create(self, request, *args, **kwargs):
+        cate = request.data['category']
+        parm = request.data['parameter']
+        ques = request.data['questions']
+
+        ### check category id & name
+        # null id
+        if cate['id'] == None:
+            # check name
+            try:
+                cateq = QuestionnaireCategory.objects.get(name=cate['name'], active=True)
+            # create cat
+            except:
+                cateq = QuestionnaireCategory.objects.create(name=cate['name'])
+        # get by id
+        else:
+            cateq = QuestionnaireCategory.objects.get(id=cate['id'])
+
+        
+
+        parmq = QuestionnaireParameter.objects.create(
+            title = parm['title'],
+            category = cateq
+        )
+
+        
+
+
+        for qu in ques:
+            if qu['custom_options']:
+                quest = QuestionnaireQuestion.objects.create(
+                    parameter = parmq,
+                    question = qu['question'],
+                    custom_options = True,
+                    options = qu['options']
+                )
+            else:
+                quest = QuestionnaireQuestion.objects.create(
+                    parameter = parmq,
+                    question = qu['question'],
+                    custom_options = False
+                )
+        
+        return Response(True, status=status.HTTP_201_CREATED,)
+    
+
+
 
 
 class QuestionnaireEvaluationViewSet(viewsets.ModelViewSet):
@@ -157,3 +204,7 @@ class QuestionnaireResultViewSet(viewsets.ReadOnlyModelViewSet):
         publish=True,
     )
     filterset_fields = ['software']
+
+
+
+

@@ -40,7 +40,7 @@ class QuestionnaireEvaluateSerializer(serializers.ModelSerializer):
 class QuestionnaireQuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = QuestionnaireQuestion
-        fields = ['id', 'question', 'parameter']
+        fields = ['id', 'question', 'parameter', 'custom_options', 'options']
 
 
 class QuestionnaireEvaluateValueSerializer(serializers.ModelSerializer):
@@ -124,25 +124,41 @@ class QuestionnaireResultSerializer(serializers.ModelSerializer):
     def byParameterData(self, obj):
         cc = QuestionnaireEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = QuestionnaireEvaluateForResultSerializer(cc, many=True)
+        print(ss.data)
         data = {}
         for d in ss.data:
             res = d['result']
             for r in res:
-                print(r)
-                p = r['question']['parameter']['id']
-                q = r['question']['id']
-                ptitle = r['question']['parameter']['title']
-                qtitle = r['question']['question']
+                _answer = r['answer']
+                _qid = r['question']['id']
+                _qtitle = r['question']['question']
+                _qcustom_options = r['question']['custom_options']
+                _qoptions = r['question']['options']
+                _pid = r['question']['parameter']['id']
+                _ptitle = r['question']['parameter']['title']
+                
+
                 try:
-                    if data[p]:
-                        data[p]['questions'][q]['data'].append(r['answer'])
+                    if data[_pid]:
+                        try:
+                            if data[_pid]['questions'][_qid]:
+                                data[_pid]['questions'][_qid]['data'].append(_answer)
+                        except:
+                            data[_pid]['questions'][_qid] = {
+                                'title': _qtitle,
+                                'custom_options': _qcustom_options,
+                                'options': _qoptions,
+                                'data': [_answer]
+                            }
                 except:
-                    data[p] = {
-                        'name': ptitle,
+                    data[_pid] = {
+                        'name': _ptitle,
                         'questions': {
-                            q: {
-                                'title': qtitle,
-                                'data': [r['answer']]
+                            _qid: {
+                                'title': _qtitle,
+                                'custom_options': _qcustom_options,
+                                'options': _qoptions,
+                                'data': [_answer]
                             }
                         }
                     }

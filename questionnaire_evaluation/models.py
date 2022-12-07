@@ -6,6 +6,7 @@ from django.utils import timezone
 
 class QuestionnaireCategory(models.Model):
     name = models.CharField(max_length=256, blank=True)
+    active = models.BooleanField(default=False)
     created_datetime = models.DateTimeField(auto_now_add=True)
     modified_datetime = models.DateTimeField(auto_now=True)
 
@@ -18,6 +19,7 @@ class QuestionnaireParameter(models.Model):
     category = models.ForeignKey(
         QuestionnaireCategory, on_delete=models.CASCADE
     )
+    active = models.BooleanField(default=False)
     created_datetime = models.DateTimeField(auto_now_add=True)
     modified_datetime = models.DateTimeField(auto_now=True)
 
@@ -68,6 +70,8 @@ class QuestionnaireEvaluate(models.Model):
 
 class QuestionnaireQuestion(models.Model):
     question = models.CharField(max_length=512, blank=True)
+    custom_options = models.BooleanField(default=False)
+    options = models.CharField(max_length=512, blank=True)
     parameter = models.ForeignKey(
         QuestionnaireParameter,
         on_delete=models.CASCADE,

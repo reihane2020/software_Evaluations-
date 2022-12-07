@@ -178,6 +178,19 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'api.utils.custom_exception_handler',
 }
 
+# email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.r707.ir'
+EMAIL_HOST_USER = 'info@r707.ir'
+EMAIL_HOST_PASSWORD = '1W2E3r#!'
+DEFAULT_FROM_EMAIL = 'info@r707.ir'
+EMAIL_USE_TLS = False
+# EMAIL_PORT = '25'
+# EMAIL_SUBJECT_PREFIX = 'R707'
+# EMAIL_USE_SSL = True
+
+
+
 SITE_ID = 1
 
 MEDIA_URL = 'media/'

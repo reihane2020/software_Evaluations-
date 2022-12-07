@@ -1,6 +1,7 @@
 from .models import *
 from rest_framework import serializers
 from software.serializers import SoftwareSerializer, SoftwareSectionSerializer
+from authentication.serializers import UserDataEvaluateResultSerializer
 
 
 class RatingEvaluateSerializer(serializers.ModelSerializer):
@@ -69,6 +70,8 @@ class RatingEvaluationSerializer(serializers.ModelSerializer):
 
 class RatingEvaluateForResultSerializer(serializers.ModelSerializer):
 
+    evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
+
     class Meta:
         model = RatingEvaluateResult
         fields = ['id', 'rating', 'evaluated_by']
@@ -78,7 +81,7 @@ class RatingEvaluateForResultSerializer(serializers.ModelSerializer):
 class RatingResultSerializer(serializers.ModelSerializer):
 
     by_degree = serializers.SerializerMethodField("byDegreeData")
-    # by_parameter = serializers.SerializerMethodField("byParameterData")
+    by_list = serializers.SerializerMethodField("byList")
 
     def byDegreeData(self, obj):
         cc = RatingEvaluateResult.objects.filter(evaluate=obj.pk)
@@ -92,22 +95,10 @@ class RatingResultSerializer(serializers.ModelSerializer):
                 data.append("Unknown")
         return data
 
-    # def byParameterData(self, obj):
-    #     cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
-    #     ss = CommentEvaluateForResultSerializer(cc, many=True)
-    #     data = {}
-    #     for d in ss.data:
-    #         res = d['result']
-    #         for r in res:
-    #             try:
-    #                 if data[r['parameter']['id']]:
-    #                     data[r['parameter']['id']]['data'].append(r['value'])
-    #             except:
-    #                 data[r['parameter']['id']] = {
-    #                     'name': r['parameter']['title'],
-    #                     'data': [r['value']]
-    #                 }
-    #     return data
+    def byList(self, obj):
+        cc = RatingEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = RatingEvaluateForResultSerializer(cc, many=True)
+        return ss.data
 
     class Meta:
         model = RatingEvaluate
@@ -122,6 +113,6 @@ class RatingResultSerializer(serializers.ModelSerializer):
             'max',
             'is_active',
             'by_degree',
-            # 'by_parameter'
+            'by_list'
         ]
         depth = 1

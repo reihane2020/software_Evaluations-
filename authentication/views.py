@@ -4,6 +4,7 @@ from .models import *
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.core.mail import send_mail
 
 
 class DegreeViewSet(viewsets.ReadOnlyModelViewSet):
@@ -67,3 +68,18 @@ class CanPublishEvaluation(APIView):
         request.user.can_publish_evaluation.append(request.data['type'])
         request.user.save()
         return Response(True)
+
+
+
+class TestMail(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, format=None):
+        f = send_mail(
+            'RAS here',
+            'Here is the message.',
+            'r@iranocc.com',
+            ['r.ahmadifar.1377@gmail.com'],
+            fail_silently=False,
+        )
+        return Response(3)

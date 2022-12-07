@@ -92,7 +92,7 @@ class CompareEvaluateForResultSerializer(serializers.ModelSerializer):
 class CompareResultSerializer(serializers.ModelSerializer):
 
     by_degree = serializers.SerializerMethodField("byDegreeData")
-    # by_parameter = serializers.SerializerMethodField("byParameterData")
+    by_parameter = serializers.SerializerMethodField("byParameterData")
 
     def byDegreeData(self, obj):
         cc = CompareEvaluateResult.objects.filter(evaluate=obj.pk)
@@ -106,22 +106,23 @@ class CompareResultSerializer(serializers.ModelSerializer):
                 data.append("Unknown")
         return data
 
-    # def byParameterData(self, obj):
-    #     cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
-    #     ss = CommentEvaluateForResultSerializer(cc, many=True)
-    #     data = {}
-    #     for d in ss.data:
-    #         res = d['result']
-    #         for r in res:
-    #             try:
-    #                 if data[r['parameter']['id']]:
-    #                     data[r['parameter']['id']]['data'].append(r['value'])
-    #             except:
-    #                 data[r['parameter']['id']] = {
-    #                     'name': r['parameter']['title'],
-    #                     'data': [r['value']]
-    #                 }
-    #     return data
+    def byParameterData(self, obj):
+        cc = CompareEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = CompareEvaluateForResultSerializer(cc, many=True)
+        
+        data = {}
+        for d in ss.data:
+            res = d['result']
+            for r in res:
+                try:
+                    if data[r['parameter']['id']]:
+                        data[r['parameter']['id']]['data'].append({"soft": r['main'], "target": r['target']})
+                except:
+                    data[r['parameter']['id']] = {
+                        'name': r['parameter']['title'],
+                        'data': [{"soft": r['main'], "target": r['target']}]
+                    }
+        return data
 
     class Meta:
         model = CompareEvaluate
@@ -137,6 +138,6 @@ class CompareResultSerializer(serializers.ModelSerializer):
             'max',
             'is_active',
             'by_degree',
-            # 'by_parameter'
+            'by_parameter'
         ]
         depth = 1

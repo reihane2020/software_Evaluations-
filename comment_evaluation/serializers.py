@@ -2,7 +2,7 @@ from .models import *
 from rest_framework import serializers
 from rest_framework import serializers
 from software.serializers import SoftwareSerializer, SoftwareSectionSerializer
-
+from authentication.serializers import UserDataEvaluateResultSerializer
 
 class CommentEvaluateSerializer(serializers.ModelSerializer):
 
@@ -70,6 +70,8 @@ class CommentEvaluationSerializer(serializers.ModelSerializer):
 
 class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
 
+    evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
+
     class Meta:
         model = CommentEvaluateResult
         fields = ['id', 'comment', 'evaluated_by']
@@ -79,7 +81,7 @@ class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
 class CommentResultSerializer(serializers.ModelSerializer):
 
     by_degree = serializers.SerializerMethodField("byDegreeData")
-    # by_parameter = serializers.SerializerMethodField("byParameterData")
+    by_list = serializers.SerializerMethodField("byList")
 
     def byDegreeData(self, obj):
         cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
@@ -93,22 +95,10 @@ class CommentResultSerializer(serializers.ModelSerializer):
                 data.append("Unknown")
         return data
 
-    # def byParameterData(self, obj):
-    #     cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
-    #     ss = CommentEvaluateForResultSerializer(cc, many=True)
-    #     data = {}
-    #     for d in ss.data:
-    #         res = d['result']
-    #         for r in res:
-    #             try:
-    #                 if data[r['parameter']['id']]:
-    #                     data[r['parameter']['id']]['data'].append(r['value'])
-    #             except:
-    #                 data[r['parameter']['id']] = {
-    #                     'name': r['parameter']['title'],
-    #                     'data': [r['value']]
-    #                 }
-    #     return data
+    def byList(self, obj):
+        cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = CommentEvaluateForResultSerializer(cc, many=True)
+        return ss.data
 
     class Meta:
         model = CommentEvaluate
@@ -123,6 +113,6 @@ class CommentResultSerializer(serializers.ModelSerializer):
             'max',
             'is_active',
             'by_degree',
-            # 'by_parameter'
+            'by_list'
         ]
         depth = 1

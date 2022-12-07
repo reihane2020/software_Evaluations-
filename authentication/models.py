@@ -98,5 +98,7 @@ class Account(AbstractUser):
         max_length=100, choices=UserLevels, default='level1'
     )
 
+    score = models.PositiveSmallIntegerField(default=0)
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "username", "phone_number"]

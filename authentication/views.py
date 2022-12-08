@@ -75,11 +75,11 @@ class TestMail(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        f = send_mail(
+        send_mail(
             'RAS here',
             'Here is the message.',
-            'r@iranocc.com',
+            'info@r707.ir',
             ['r.ahmadifar.1377@gmail.com'],
             fail_silently=False,
         )
-        return Response(3)
+        return Response(True)

@@ -38,9 +38,17 @@ class CompareEvaluateViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         publish = False
+        confirm_publish = False
         extension = False
+        confirm_extension = False
+
         try:
             publish = self.request.data['publish']
+        except:
+            pass
+
+        try:
+            confirm_publish = self.request.data['confirm_publish']
         except:
             pass
 
@@ -49,47 +57,114 @@ class CompareEvaluateViewSet(viewsets.ModelViewSet):
         except:
             pass
 
+        try:
+            confirm_extension = self.request.data['confirm_extension']
+        except:
+            pass
+
         if publish:
             # validate
+            _score = self.request.user.score
+            _max = serializer.data['max']
+            _peopleneed = Setting.objects.get(pk=1).peopleneed_score
+            _all_score_need = _max * _peopleneed
 
-            time_threshold = timezone.now() - timedelta(days=30)
-            res = self.queryset.filter(
-                created_by=self.request.user,
-                published_datetime__gt=time_threshold,
-                publish=True
+            if _all_score_need > _score:
+                _can_do = math.floor(_score / _peopleneed)
+                raise APIException(
+                    code="NO_SCORE",
+                    detail=f"You do not have the necessary scores to do this. You can publish for {_can_do} people"
+                )
+            
+            
+            raise APIException(
+                code="CONFIRM_DECREASE_SCORE",
+                detail=f"Are you sure to pay {_all_score_need}?"
             )
 
-            if res.count() >= 1 and not "compare" in self.request.user.can_publish_evaluation:
+        
+        if confirm_publish:
+            # validate
+            _score = self.request.user.score
+            _max = serializer.data['max']
+            _peopleneed = Setting.objects.get(pk=1).peopleneed_score
+            _all_score_need = _max * _peopleneed
+
+            if _all_score_need > _score:
+                _can_do = math.floor(_score / _peopleneed)
                 raise APIException(
-                    code="LIMIT_EVALUATION",
-                    detail="You can publish 1 evaluation per month"
+                    code="NO_SCORE",
+                    detail=f"You do not have the necessary scores to do this. You can publish for {_can_do} people"
                 )
 
-            if "compare" in self.request.user.can_publish_evaluation:
-                self.request.user.can_publish_evaluation.remove("compare")
-                self.request.user.save()
-
+            
+            self.request.user.score = _score - _all_score_need
+            self.request.user.save()
             days = Setting.objects.get(pk=1).evaluation_days
-            serializer.save(
-                deadline=date.today() + timedelta(days=days),
-                publish=True,
-                is_active=True,
-                published_datetime=timezone.now()
-            )
+            f = self.queryset.get(pk=serializer.data['id'])
+            f.deadline=date.today() + timedelta(days=days)
+            f.publish=True
+            f.is_active=True
+            f.published_datetime=timezone.now()
+            f.save()
+
 
         if extension:
+            # validate
+            _score = self.request.user.score
+            _max = serializer.data['max']
+            _peopleneed = Setting.objects.get(pk=1).peopleneed_score
+            _all_score_need = _max * _peopleneed
+
+            if _all_score_need > _score:
+                _can_do = math.floor(_score / _peopleneed)
+                raise APIException(
+                    code="NO_SCORE",
+                    detail=f"You do not have the necessary scores to do this. You can publish for {_can_do} people"
+                )
+            
+            
+            raise APIException(
+                code="CONFIRM_DECREASE_SCORE",
+                detail=f"Are you sure to pay {_all_score_need}?"
+            )
+
+        
+        if confirm_extension:
+            # validate
+            _score = self.request.user.score
+            _max = serializer.data['max']
+            _peopleneed = Setting.objects.get(pk=1).peopleneed_score
+            _all_score_need = _max * _peopleneed
+
+            if _all_score_need > _score:
+                _can_do = math.floor(_score / _peopleneed)
+                raise APIException(
+                    code="NO_SCORE",
+                    detail=f"You do not have the necessary scores to do this. You can publish for {_can_do} people"
+                )
+
+            
+            self.request.user.score = _score - _all_score_need
+            self.request.user.save()
             days = Setting.objects.get(pk=1).evaluation_days
+
             ev = self.queryset.get(pk=self.kwargs['pk'])
             m = ev.deadline
             if (m - date.today()).total_seconds() < 0:
                 m = date.today()
-            serializer.save(
-                deadline=m + timedelta(days=days),
-                publish=True,
-                is_active=True
-            )
 
-        return super().perform_update(serializer)
+
+            f = self.queryset.get(pk=serializer.data['id'])
+            f.deadline=m + timedelta(days=days)
+            f.publish=True
+            f.is_active=True
+            f.save()
+
+        try:
+            return super().perform_update(serializer)
+        except:
+            return True
 
 
 # ****

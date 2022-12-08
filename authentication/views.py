@@ -61,13 +61,13 @@ class CheckPhoneVerifyView(APIView):
             raise Exception("Invalid otp")
 
 
-class CanPublishEvaluation(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+# class CanPublishEvaluation(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
 
-    def post(self, request, format=None):
-        request.user.can_publish_evaluation.append(request.data['type'])
-        request.user.save()
-        return Response(True)
+#     def post(self, request, format=None):
+#         request.user.can_publish_evaluation.append(request.data['type'])
+#         request.user.save()
+#         return Response(True)
 
 
 

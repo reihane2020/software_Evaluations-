@@ -26,7 +26,7 @@ class _UserAdmin(UserAdmin):
                 "is_staff",
                 "is_active",
                 "is_superuser",
-                "can_publish_evaluation",
+                # "can_publish_evaluation",
                 "user_level"
             )
         }

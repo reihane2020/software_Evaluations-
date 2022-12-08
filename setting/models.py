@@ -9,5 +9,6 @@ class Setting(models.Model):
     initial_score = models.PositiveSmallIntegerField(default=100)
     referral_score = models.PositiveSmallIntegerField(default=100)
     evaluation_score = models.PositiveSmallIntegerField(default=5)
+    peopleneed_score = models.PositiveSmallIntegerField(default=5)
 
     edit = "Edit"

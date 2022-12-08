@@ -18,6 +18,7 @@ class SettingAdmin(admin.ModelAdmin):
         'initial_score',
         'referral_score',
         'evaluation_score',
+        'peopleneed_score',
         'edit'
     ]
     list_display_links = ['edit']
@@ -26,6 +27,7 @@ class SettingAdmin(admin.ModelAdmin):
         'evaluation_days',
         'initial_score',
         'referral_score',
+        'peopleneed_score',
         'evaluation_score',
     ]
 

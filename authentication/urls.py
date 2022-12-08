@@ -26,6 +26,6 @@ urlpatterns = [
     path(r'register/', include('dj_rest_auth.registration.urls')),
     path(r'verify/phone/', CheckPhoneVerifyView.as_view()),
     path(r'verify/phone/resend/', PhoneVerifyView.as_view()),
-    path(r'user/pay_confirm/publish_evaluation/', CanPublishEvaluation.as_view()),
+    # path(r'user/pay_confirm/publish_evaluation/', CanPublishEvaluation.as_view()),
     path(r'user/test_email', TestMail.as_view()),
 ] + router.urls

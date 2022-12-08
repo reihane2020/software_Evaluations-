@@ -31,7 +31,7 @@ EvaluationChoices = (
     ('questionnaire', "Questionnaire"),
 )
 
-AllEvaluation = ['metric', 'comment', 'rating', 'compare', 'questionnaire']
+# AllEvaluation = ['metric', 'comment', 'rating', 'compare', 'questionnaire']
 
 UserLevels = (
     ('level1', 'Level 1'),  # just view
@@ -90,13 +90,13 @@ class Account(AbstractUser):
         default=['email']
     )
 
-    can_publish_evaluation = MultiSelectField(
-        null=True,
-        blank=True,
-        choices=EvaluationChoices,
-        verbose_name='Publish evaluation',
-        default=AllEvaluation
-    )
+    # can_publish_evaluation = MultiSelectField(
+    #     null=True,
+    #     blank=True,
+    #     choices=EvaluationChoices,
+    #     verbose_name='Publish evaluation',
+    #     default=AllEvaluation
+    # )
 
     user_level = models.CharField(
         max_length=100, choices=UserLevels, default='level1'

@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     'api.evaluation.r707.ir'
 ]
 
+CSRF_TRUSTED_ORIGINS = ['https://api.evaluation.r707.ir']
 
 # Application definition
 

@@ -267,7 +267,7 @@ class QuestionnaireEvaluationViewSet(viewsets.ModelViewSet):
             #### score eval
             try:
                 self.request.user.score = self.request.user.score + Setting.objects.get(pk=1).evaluation_score
-                self.request.user.score.save()
+                self.request.user.save()
             except:
                 pass
             #### score eval

@@ -118,7 +118,7 @@ class Account(AbstractUser):
     )
 
     token = models.CharField(
-        max_length=20, default=generateToken,
+        max_length=20, default=generateToken, unique=True,
     )
 
     USERNAME_FIELD = "email"

@@ -151,7 +151,6 @@ class CustomRegisterSerializer(RegisterSerializer):
         # try:
         
         inviter_account = Account.objects.get(token=request.data['ref'])
-        raise Exception(inviter_account)
         inviter_account.score = inviter_account.score + Setting.objects.get(pk=1).referral_score
         inviter_account.save()            
         # except:

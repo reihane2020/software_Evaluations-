@@ -148,13 +148,12 @@ class CustomRegisterSerializer(RegisterSerializer):
                     detail=serializers.as_serializer_error(exc)
                 )
 
-        # try:
-        
-        inviter_account = Account.objects.get(token=request.data['ref'])
-        inviter_account.score = inviter_account.score + Setting.objects.get(pk=1).referral_score
-        inviter_account.save()            
-        # except:
-        #     pass
+        try:
+            inviter_account = Account.objects.get(token=request.data['ref'])
+            inviter_account.score = inviter_account.score + Setting.objects.get(pk=1).referral_score
+            inviter_account.save()            
+        except:
+            pass
 
         try:
             if not sendSmsVerifyCode(user):

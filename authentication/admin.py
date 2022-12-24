@@ -97,7 +97,7 @@ class _UserAdmin(UserAdmin):
         "last_login",
         "date_joined",
         "score",
-        "score_freeze"
+        "score_freeze",
         "withdrawal_request",
         "bank_account",
     )

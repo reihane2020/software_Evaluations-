@@ -29,10 +29,14 @@ ALLOWED_HOSTS = [
     '::1',
     'localhost',
     '127.0.0.1',
-    'api.evaluation.r707.ir'
+    'api.evaluation.r707.ir',
+    'evaluationapi.r707.ir'
 ]
 
-CSRF_TRUSTED_ORIGINS = ['https://api.evaluation.r707.ir']
+CSRF_TRUSTED_ORIGINS = [
+    'https://api.evaluation.r707.ir',
+    'https://evaluationapi.r707.ir'
+]
 
 # Application definition
 

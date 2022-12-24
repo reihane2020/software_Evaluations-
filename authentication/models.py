@@ -121,5 +121,9 @@ class Account(AbstractUser):
         max_length=20, default=generateToken, unique=True,
     )
 
+    bank_account = models.CharField(
+        max_length=30,blank=True, null=True,
+    )
+
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "username", "phone_number"]

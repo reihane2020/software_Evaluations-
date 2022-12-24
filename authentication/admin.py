@@ -14,7 +14,8 @@ class _UserAdmin(UserAdmin):
                 "email",
                 ("phone_number", "is_verified_phone"),
                 "degree",
-                "avatar"
+                "avatar",
+                "bank_account"
             )
         }
     ]

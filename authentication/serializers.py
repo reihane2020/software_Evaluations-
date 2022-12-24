@@ -85,6 +85,8 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'document3_id',
             'token',
             'bank_account',
+            'withdrawal_request',
+            'score_freeze'
         ]
 
 

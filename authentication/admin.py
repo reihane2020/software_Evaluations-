@@ -15,7 +15,7 @@ class _UserAdmin(UserAdmin):
                 ("phone_number", "is_verified_phone"),
                 "degree",
                 "avatar",
-                "bank_account"
+                
             )
         }
     ]
@@ -57,6 +57,9 @@ class _UserAdmin(UserAdmin):
         {
             "fields": (
                 "score",
+                "score_freeze",
+                "withdrawal_request",
+
             )
         }
     ]
@@ -95,6 +98,9 @@ class _UserAdmin(UserAdmin):
         "last_login",
         "date_joined",
         "score",
+        "score_freeze"
+        "withdrawal_request",
+        "bank_account",
     )
 
     list_editable = [

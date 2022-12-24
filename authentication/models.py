@@ -103,6 +103,7 @@ class Account(AbstractUser):
     )
 
     score = models.PositiveSmallIntegerField(default=0)
+    score_freeze = models.PositiveSmallIntegerField(default=0)
 
     document1 = models.ForeignKey("upload.Image",
         related_name="document1",
@@ -123,6 +124,10 @@ class Account(AbstractUser):
 
     bank_account = models.CharField(
         max_length=30,blank=True, null=True,
+    )
+
+    withdrawal_request = models.BooleanField(
+        default=False,
     )
 
     USERNAME_FIELD = "email"

@@ -59,7 +59,6 @@ class _UserAdmin(UserAdmin):
                 "score",
                 "score_freeze",
                 "withdrawal_request",
-
             )
         }
     ]
@@ -98,8 +97,8 @@ class _UserAdmin(UserAdmin):
         "last_login",
         "date_joined",
         "score",
-        # "score_freeze"
-        # "withdrawal_request",
+        "score_freeze"
+        "withdrawal_request",
         "bank_account",
     )
 

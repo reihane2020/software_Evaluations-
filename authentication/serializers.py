@@ -84,6 +84,7 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'document2_id',
             'document3_id',
             'token',
+            'bank_account',
         ]
 
 

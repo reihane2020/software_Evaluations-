@@ -75,7 +75,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
                 if _type != None:
                     if qs['evaluations'] in _type:
                         data.append(qs)
-                else
+                else:
                     data.append(qs)
 
         return Response(data)

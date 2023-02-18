@@ -60,7 +60,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        queryset = queryset.objects.filter(area__in=[1, 8])
+        queryset = queryset.filter(area__in=[1, 8])
         serializer = self.get_serializer(queryset, many=True)
 
         # veval = self.request.data['type']

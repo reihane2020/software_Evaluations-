@@ -59,9 +59,13 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
     def list(self, request, *args, **kwargs):
-        qarea = request.data['area']
+        try:
+            qarea = request.data['area']
+        except:
+            print("hi")
+
         queryset = self.filter_queryset(self.get_queryset())
-        queryset = queryset.filter(area__in=qarea)
+        # queryset = queryset.filter(area__in=qarea)
         serializer = self.get_serializer(queryset, many=True)
 
         

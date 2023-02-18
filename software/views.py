@@ -59,7 +59,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
     def list(self, request, *args, **kwargs):
-        area = self.request.GET.get('area', None)
+        area = self.request.GET.getlist('area', None)
         
 
         queryset = self.filter_queryset(self.get_queryset())

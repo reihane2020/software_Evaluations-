@@ -59,11 +59,12 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
     def list(self, request, *args, **kwargs):
+        qarea = self.request.data['area']
         queryset = self.filter_queryset(self.get_queryset())
-        queryset = queryset.filter(area__in=[1, 8])
+        queryset = queryset.filter(area__in=qarea)
         serializer = self.get_serializer(queryset, many=True)
 
-        # veval = self.request.data['type']
+        
         data = []
         for qs in serializer.data:
             if len(qs['evaluations']) > 0 :

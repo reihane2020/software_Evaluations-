@@ -60,7 +60,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         area = self.request.GET.get('area', None)
-        print(area)
+        
 
         queryset = self.filter_queryset(self.get_queryset())
         # queryset = queryset.filter(area__in=qarea)
@@ -72,7 +72,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
             if len(qs['evaluations']) > 0 :
                 data.append(qs)
 
-        return Response(data)
+        return Response(area)
 
     def retrieve(self, request, *args, **kwargs):
         if len(self.get_object().evaluations) == 0:

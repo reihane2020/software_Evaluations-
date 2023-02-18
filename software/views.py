@@ -53,7 +53,6 @@ class MySoftwareViewSet(viewsets.ModelViewSet):
 
 class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SoftwareSerializer
-    filterset_fields = ['area']
     pagination_class = StandardResultsSetPagination
     queryset = Software.objects.filter(
         is_active=True,
@@ -61,6 +60,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
+        queryset = queryset.objects.filter(area__in=[1, 8])
         serializer = self.get_serializer(queryset, many=True)
 
         # veval = self.request.data['type']

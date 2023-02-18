@@ -59,18 +59,24 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
     def list(self, request, *args, **kwargs):
-        area = self.request.GET.getlist('area', None)
+        _area = self.request.GET.getlist('area', None)
+        _type = self.request.GET.getlist('type', None)
         
 
         queryset = self.filter_queryset(self.get_queryset())
-        # queryset = queryset.filter(area__in=qarea)
+        if _area != None
+            queryset = queryset.filter(area__in=_area)
         serializer = self.get_serializer(queryset, many=True)
 
         
         data = []
         for qs in serializer.data:
-            if len(qs['evaluations']) > 0 :
-                data.append(qs)
+            if len(qs['evaluations']) > 0:
+                if _type != None
+                    if qs['evaluations'] in _type:
+                        data.append(qs)
+                else
+                    data.append(qs)
 
         return Response(area)
 

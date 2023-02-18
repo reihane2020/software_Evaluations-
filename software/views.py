@@ -63,7 +63,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
 
-        veval = self.request.data['type']
+        # veval = self.request.data['type']
         data = []
         for qs in serializer.data:
             if len(qs['evaluations']) > 0 :

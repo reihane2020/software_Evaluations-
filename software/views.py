@@ -66,7 +66,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
         
 
         queryset = self.filter_queryset(self.get_queryset())
-        if _area != None:
+        if len(_area) > 0:
             queryset = queryset.filter(area__in=_area)
         serializer = self.get_serializer(queryset, many=True)
 
@@ -74,7 +74,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
         data = []
         for qs in serializer.data:
             if len(qs['evaluations']) > 0:
-                if _type != None:
+                if len(_type) > 0:
                     if qs['evaluations'] in _type:
                         data.append(qs)
                 else:

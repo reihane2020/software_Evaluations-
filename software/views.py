@@ -4,7 +4,17 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
 
+
+from rest_framework.pagination import PageNumberPagination
+
+
 # Create your views here.
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'per'
+    page_query_param = 'p'
+
+
 
 
 class SoftwareAreaViewSet(viewsets.ReadOnlyModelViewSet):
@@ -43,7 +53,8 @@ class MySoftwareViewSet(viewsets.ModelViewSet):
 
 class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SoftwareSerializer
-    pagination_class = None
+    filterset_fields = ['area']
+    pagination_class = StandardResultsSetPagination
     queryset = Software.objects.filter(
         is_active=True,
     )
@@ -52,9 +63,10 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
 
+        veval = self.request.data['type']
         data = []
         for qs in serializer.data:
-            if len(qs['evaluations']) > 0:
+            if len(qs['evaluations']) > 0 :
                 data.append(qs)
 
         return Response(data)

@@ -78,7 +78,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
                 else
                     data.append(qs)
 
-        return Response(area)
+        return Response(data)
 
     def retrieve(self, request, *args, **kwargs):
         if len(self.get_object().evaluations) == 0:

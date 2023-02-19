@@ -71,6 +71,7 @@ class StandardResultsSetPagination(PageNumberPagination):
     page_size_query_param = 'per'
     page_query_param = 'p'
 
+
 class UsersList(APIView):
     permission_classes = [permissions.AllowAny]
     serializer_class = UserDataEvaluateResultSerializer

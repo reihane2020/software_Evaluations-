@@ -76,7 +76,7 @@ class InviteToMySoftwareViewSet(viewsets.ReadOnlyModelViewSet):
             if len(qs['evaluations']) > 0:
                 data.append(qs)
         
-        return Response(serializer.data)
+        return Response(data)
 
 
 

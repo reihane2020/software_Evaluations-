@@ -53,7 +53,6 @@ class MySoftwareViewSet(viewsets.ModelViewSet):
 
 class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SoftwareSerializer
-    pagination_class = StandardResultsSetPagination
     queryset = Software.objects.filter(
         is_active=True,
     )
@@ -82,7 +81,13 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
                 else:
                     data.append(qs)
 
-        return self.get_paginated_response(data)
+
+        paginator = StandardResultsSetPagination()
+        paginate_queryset = paginator.paginate_queryset(queryset, request)
+        serialize_pagination = SerializerClass(paginate_queryset, many=True).data
+        data = paginator.get_paginated_response(serialize_pagination).data
+
+        return Response(data)
 
     def retrieve(self, request, *args, **kwargs):
         if len(self.get_object().evaluations) == 0:

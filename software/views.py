@@ -104,13 +104,13 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
 
         
         data = []
-        for qs in serializer.data:
+        for index, qs in serializer.data:
             if len(qs['evaluations']) > 0:
                 if len(_type) > 0:
                     if qs['evaluations'] in _type:
-                        data.append(qs)
+                        data.append(queryset[index])
                 else:
-                    data.append(qs)
+                    data.append(queryset[index])
         
         paginator = StandardResultsSetPagination()
         paginate_queryset = paginator.paginate_queryset(data, request)

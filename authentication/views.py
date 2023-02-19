@@ -66,8 +66,6 @@ class UsersList(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        user = Account.objects.filter(
-            is_active=True,
-        )
+        user = Account.objects.filter(is_active=True, is_staff=False, is_superuser=False).order_by('-evaluator_scores')[:10:1]
         data = UserDataEvaluateResultSerializer(user, many=True).data
         return Response(data)

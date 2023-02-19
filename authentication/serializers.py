@@ -102,6 +102,7 @@ class UserDataEvaluateResultSerializer(UserDetailsSerializer):
     class Meta():
         model = Account
         fields = [
+            'id',
             'email',
             'username',
             'first_name',

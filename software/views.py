@@ -3,8 +3,6 @@ from .serializers import *
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from rest_framework.exceptions import APIException
-
-
 from rest_framework.pagination import PageNumberPagination
 
 

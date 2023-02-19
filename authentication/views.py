@@ -61,25 +61,13 @@ class CheckPhoneVerifyView(APIView):
             raise Exception("Invalid otp")
 
 
-# class CanPublishEvaluation(APIView):
-#     permission_classes = [permissions.IsAuthenticated]
 
-#     def post(self, request, format=None):
-#         request.user.can_publish_evaluation.append(request.data['type'])
-#         request.user.save()
-#         return Response(True)
-
-
-
-class TestMail(APIView):
+class UsersList(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        send_mail(
-            'RAS here',
-            'Here is the message.',
-            'info@r707.ir',
-            ['r.ahmadifar.1377@gmail.com'],
-            fail_silently=False,
+        user = Account.objects.filter(
+            is_active=True,
         )
-        return Response(True)
+        data = UserDataEvaluateResultSerializer(user).data
+        return Response(data)

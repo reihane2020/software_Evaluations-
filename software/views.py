@@ -98,7 +98,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
 
         if _top:
             queryset = queryset.order_by('-id')[:12:1]
-            data = self.get_serializer(user, many=True).data
+            data = self.get_serializer(queryset, many=True).data
         else:
             if(_search):
                 queryset = queryset.filter(name__contains=_search)

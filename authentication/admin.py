@@ -59,7 +59,8 @@ class _UserAdmin(UserAdmin):
                 "score_freeze",
                 "withdrawal_request",
                 "is_verified",
-                "stars"
+                "stars",
+                "evaluator_scores"
             )
         }
     ]

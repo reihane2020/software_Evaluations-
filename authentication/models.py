@@ -136,6 +136,7 @@ class Account(AbstractUser):
     )
 
     stars = models.SmallIntegerField(default=0)
+    evaluator_scores = models.IntegerField(default=0)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["first_name", "last_name", "username", "phone_number"]

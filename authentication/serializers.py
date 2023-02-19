@@ -88,7 +88,8 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'withdrawal_request',
             'score_freeze',
             'stars',
-            'is_verified'
+            'is_verified',
+            'evaluator_scores'
         ]
 
 
@@ -108,7 +109,8 @@ class UserDataEvaluateResultSerializer(UserDetailsSerializer):
             'degree',
             'avatar',
             'stars',
-            'is_verified'
+            'is_verified',
+            'evaluator_scores'
         ]
 
 

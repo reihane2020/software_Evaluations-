@@ -82,7 +82,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
                 else:
                     data.append(qs)
 
-        return Response(data)
+        return self.get_paginated_response(data)
 
     def retrieve(self, request, *args, **kwargs):
         if len(self.get_object().evaluations) == 0:

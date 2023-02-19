@@ -15,7 +15,6 @@ class _UserAdmin(UserAdmin):
                 ("phone_number", "is_verified_phone"),
                 "degree",
                 "avatar",
-                
             )
         }
     ]
@@ -59,6 +58,8 @@ class _UserAdmin(UserAdmin):
                 "score",
                 "score_freeze",
                 "withdrawal_request",
+                "is_verified",
+                "stars"
             )
         }
     ]
@@ -100,7 +101,11 @@ class _UserAdmin(UserAdmin):
         "score_freeze",
         "withdrawal_request",
         "bank_account",
+        "is_verified",
+        "stars"
     )
+
+    # 930rrr888
 
     list_editable = [
         "is_active"

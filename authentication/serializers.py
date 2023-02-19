@@ -86,13 +86,17 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'token',
             'bank_account',
             'withdrawal_request',
-            'score_freeze'
+            'score_freeze',
+            'stars',
+            'is_verified'
         ]
 
 
 class UserDataEvaluateResultSerializer(UserDetailsSerializer):
 
     degree = DegreeSerializer(read_only=True)
+    avatar = ImageSerializer(read_only=True)
+
 
     class Meta():
         model = Account
@@ -102,6 +106,9 @@ class UserDataEvaluateResultSerializer(UserDetailsSerializer):
             'first_name',
             'last_name',
             'degree',
+            'avatar',
+            'stars',
+            'is_verified'
         ]
 
 

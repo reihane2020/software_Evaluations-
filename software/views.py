@@ -89,33 +89,39 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     )
 
     def list(self, request, *args, **kwargs):
+        _top = self.request.GET.get('top', False)
         _area = self.request.GET.getlist('area', None)
         _type = self.request.GET.getlist('type', None)
         _search = self.request.GET.get('search', None)
 
         queryset = self.filter_queryset(self.get_queryset())
 
-        if(_search):
-            queryset = queryset.filter(name__contains=_search)
+        if _top:
+            queryset = queryset.order_by('-id')[:12:1]
+            data = self.get_serializer(user, many=True).data
+        else:
+            if(_search):
+                queryset = queryset.filter(name__contains=_search)
 
-        if len(_area) > 0:
-            queryset = queryset.filter(area__in=_area)
-        serializer = self.get_serializer(queryset, many=True)
+            if len(_area) > 0:
+                queryset = queryset.filter(area__in=_area)
+            serializer = self.get_serializer(queryset, many=True)
 
-        
-        data = []
-        for index, qs in serializer.data:
-            if len(qs['evaluations']) > 0:
-                if len(_type) > 0:
-                    if qs['evaluations'] in _type:
+            
+            data = []
+            for index, qs in serializer.data:
+                if len(qs['evaluations']) > 0:
+                    if len(_type) > 0:
+                        if qs['evaluations'] in _type:
+                            data.append(queryset[index])
+                    else:
                         data.append(queryset[index])
-                else:
-                    data.append(queryset[index])
+            
+            paginator = StandardResultsSetPagination()
+            paginate_queryset = paginator.paginate_queryset(data, request)
+            serialize_pagination =  self.get_serializer(paginate_queryset, many=True).data
+            data = paginator.get_paginated_response(serialize_pagination).data
         
-        paginator = StandardResultsSetPagination()
-        paginate_queryset = paginator.paginate_queryset(data, request)
-        serialize_pagination =  self.get_serializer(paginate_queryset, many=True).data
-        data = paginator.get_paginated_response(serialize_pagination).data
 
         return Response(data)
 

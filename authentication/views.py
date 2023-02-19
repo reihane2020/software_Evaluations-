@@ -81,7 +81,7 @@ class UsersList(APIView):
 
         user = Account.objects.filter(is_active=True, is_staff=False, is_superuser=False)
         if _top:
-            user = user.order_by('-evaluator_scores')[:10:1]
+            user = user.order_by('-evaluator_scores')[:12:1]
             data = UserDataEvaluateResultSerializer(user, many=True).data
         else:
             user = user.order_by('-evaluator_scores')

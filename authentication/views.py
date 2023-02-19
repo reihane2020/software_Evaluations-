@@ -74,7 +74,6 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 class UsersList(APIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = UserDataEvaluateResultSerializer
 
     def get(self, request, format=None):
         _top = self.request.GET.get('top', False)
@@ -83,12 +82,12 @@ class UsersList(APIView):
         user = Account.objects.filter(is_active=True, is_staff=False, is_superuser=False)
         if _top:
             user = user.order_by('-evaluator_scores')[:10:1]
-            data = self.get_serializer(user, many=True).data
+            data = UserDataEvaluateResultSerializer(user, many=True).data
         else:
             user = user.order_by('-evaluator_scores')
             paginator = StandardResultsSetPagination()
             paginate_queryset = paginator.paginate_queryset(user, request)
-            serialize_pagination = self.get_serializer(paginate_queryset, many=True).data
+            serialize_pagination = UserDataEvaluateResultSerializer(paginate_queryset, many=True).data
             data = paginator.get_paginated_response(serialize_pagination).data
 
 

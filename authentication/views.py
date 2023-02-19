@@ -62,10 +62,30 @@ class CheckPhoneVerifyView(APIView):
 
 
 
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'per'
+    page_query_param = 'p'
+
 class UsersList(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, format=None):
-        user = Account.objects.filter(is_active=True, is_staff=False, is_superuser=False).order_by('-evaluator_scores')[:10:1]
-        data = UserDataEvaluateResultSerializer(user, many=True).data
+        _top = self.request.GET.get('top', False)
+        
+
+        user = Account.objects.filter(is_active=True, is_staff=False, is_superuser=False)
+        if _top:
+            user = user.order_by('-evaluator_scores')[:10:1]
+            data = UserDataEvaluateResultSerializer(user, many=True).data
+        else:
+            user = user.order_by('-evaluator_scores')
+            paginator = StandardResultsSetPagination()
+            paginate_queryset = paginator.paginate_queryset(user, request)
+            serialize_pagination = self.get_serializer(paginate_queryset, many=True).data
+            data = paginator.get_paginated_response(serialize_pagination).data
+
+
+        
         return Response(data)

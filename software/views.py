@@ -51,6 +51,39 @@ class MySoftwareViewSet(viewsets.ModelViewSet):
         return super().perform_update(instance)
 
 
+
+
+
+
+
+
+
+class InviteToMySoftwareViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = MySoftwareSerializer
+    pagination_class = None
+    queryset = Software.objects.all()
+    permission_classes = [permissions.IsAuthenticated, HasPermissions]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(
+            Software.objects.filter(
+                created_by=self.request.user,
+                is_active=True,
+            )
+        )
+        serializer = self.get_serializer(queryset, many=True)
+
+        data = []
+        for qs in serializer.data:
+            if len(qs['evaluations']) > 0:
+                data.append(qs)
+        
+        return Response(serializer.data)
+
+
+
+
+
 class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SoftwareSerializer
     queryset = Software.objects.filter(
@@ -80,12 +113,6 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
                         data.append(qs)
                 else:
                     data.append(qs)
-
-
-        # paginator = StandardResultsSetPagination()
-        # paginate_queryset = paginator.paginate_queryset(queryset, request)
-        # serialize_pagination = self.get_serializer(paginate_queryset, many=True).data
-        # data = paginator.get_paginated_response(serialize_pagination).data
 
         return Response(data)
 

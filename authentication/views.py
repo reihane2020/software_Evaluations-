@@ -69,5 +69,5 @@ class UsersList(APIView):
         user = Account.objects.filter(
             is_active=True,
         )
-        data = UserDataEvaluateResultSerializer(user).data
+        data = UserDataEvaluateResultSerializer(user, many=True).data
         return Response(data)

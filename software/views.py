@@ -98,7 +98,16 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
 
         if _top:
             queryset = queryset.order_by('-id')[:12:1]
-            data = self.get_serializer(queryset, many=True).data
+            serializer = self.get_serializer(queryset, many=True)
+            data = []
+            for index, qs in serializer.data:
+                if len(qs['evaluations']) > 0:
+                    if len(_type) > 0:
+                        if qs['evaluations'] in _type:
+                            data.append(qs)
+                    else:
+                        data.append(qs)
+            
         else:
             if(_search):
                 queryset = queryset.filter(name__contains=_search)

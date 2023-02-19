@@ -114,7 +114,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
         
         paginator = StandardResultsSetPagination()
         paginate_queryset = paginator.paginate_queryset(data, request)
-        serialize_pagination = UserDataEvaluateResultSerializer(paginate_queryset, many=True).data
+        serialize_pagination =  self.get_serializer(paginate_queryset, many=True).data
         data = paginator.get_paginated_response(serialize_pagination).data
 
         return Response(data)

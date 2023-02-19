@@ -110,6 +110,7 @@ class UserDataEvaluateResultSerializer(UserDetailsSerializer):
             'avatar',
             'stars',
             'is_verified',
+            'user_level',
             'evaluator_scores'
         ]
 

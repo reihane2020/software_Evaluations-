@@ -100,7 +100,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = queryset.order_by('-id')
             serializer = self.get_serializer(queryset, many=True)
             data = []
-            for index, qs in serializer.data:
+            for index, qs in enumerate(serializer.data):
                 if len(qs['evaluations']) > 0:
                     data.append(qs)
 
@@ -116,7 +116,7 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
 
             
             data = []
-            for index, qs in serializer.data:
+            for index, qs in enumerate(serializer.data):
                 if len(qs['evaluations']) > 0:
                     if len(_type) > 0:
                         if qs['evaluations'] in _type:

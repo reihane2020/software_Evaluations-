@@ -56,20 +56,23 @@ class MySoftwareViewSet(viewsets.ModelViewSet):
 
 
 
-class InviteToMySoftwareViewSet(viewsets.ReadOnlyModelViewSet):
-    serializer_class = MySoftwareSerializer
-    pagination_class = None
-    queryset = Software.objects.all()
+class InviteToMySoftwareViewSet(APIView):
     permission_classes = [permissions.IsAuthenticated, HasPermissions]
 
-    def list(self, request, *args, **kwargs):
+    def post(self, request, format=None):
+        projects = self.request.POST.getList('projects', None)
+        user = self.request.POST.get('user', None)
+        return Response(user)
+
+    def get(self, request, format=None):
+        queryset = Software.objects.all()
         queryset = self.filter_queryset(
             Software.objects.filter(
                 created_by=self.request.user,
                 is_active=True,
             )
         )
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = MySoftwareSerializer(queryset, many=True)
 
         data = []
         for qs in serializer.data:

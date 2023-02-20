@@ -7,6 +7,7 @@ from rest_framework.exceptions import APIException
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 import json
+from django.core.mail import send_mail
 
 
 # Create your views here.

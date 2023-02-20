@@ -1,4 +1,5 @@
 from .models import *
+from authentication.models import Account
 from .serializers import *
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
@@ -68,7 +69,7 @@ class InviteToMySoftwareView(APIView):
 
 
         project = Software.objects.get(id=_project)
-        user = Software.objects.get(id=_user)
+        user = Account.objects.get(id=_user)
 
 
 

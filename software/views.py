@@ -57,7 +57,7 @@ class MySoftwareViewSet(viewsets.ModelViewSet):
 
 
 
-class InviteToMySoftwareViewSet(APIView):
+class InviteToMySoftwareView(APIView):
     permission_classes = [permissions.IsAuthenticated, HasPermissions]
 
     def post(self, request, format=None):

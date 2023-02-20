@@ -61,9 +61,8 @@ class InviteToMySoftwareView(APIView):
     permission_classes = [permissions.IsAuthenticated, HasPermissions]
 
     def post(self, request, format=None):
-        projects = self.request.POST.getList('projects', None)
-        user = self.request.POST.get('user', None)
-        return Response(user)
+        mydata = json.loads(request.body)
+        return Response(mydata)
 
     def get(self, request, format=None):
         queryset = Software.objects.filter(

@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.mail import send_mail
 from rest_framework.pagination import PageNumberPagination
+from django.db.models import Q
 
 
 
@@ -77,6 +78,7 @@ class UsersList(APIView):
 
     def get(self, request, format=None):
         _top = self.request.GET.get('top', False)
+        _search = self.request.GET.get('search', None)
         
 
         user = Account.objects.filter(is_active=True, is_staff=False, is_superuser=False)
@@ -85,6 +87,8 @@ class UsersList(APIView):
             data = UserDataEvaluateResultSerializer(user, many=True).data
         else:
             user = user.order_by('-evaluator_scores')
+            if(_search):
+                user = user.filter(Q(first_name__contains=_search) | Q(last_name__contains=_search))
             paginator = StandardResultsSetPagination()
             paginate_queryset = paginator.paginate_queryset(user, request)
             serialize_pagination = UserDataEvaluateResultSerializer(paginate_queryset, many=True).data

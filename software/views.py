@@ -66,13 +66,11 @@ class InviteToMySoftwareView(APIView):
         return Response(user)
 
     def get(self, request, format=None):
-        queryset = Software.objects.all()
-        queryset = self.filter_queryset(
-            Software.objects.filter(
-                created_by=self.request.user,
-                is_active=True,
-            )
+        queryset = Software.objects.filter(
+            created_by=self.request.user,
+            is_active=True,
         )
+        
         serializer = MySoftwareSerializer(queryset, many=True)
 
         data = []

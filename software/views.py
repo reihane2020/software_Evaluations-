@@ -71,9 +71,14 @@ class InviteToMySoftwareView(APIView):
         project = Software.objects.get(id=_project)
         user = Account.objects.get(id=_user)
 
-
-
-        return Response(user)
+        send_mail(
+            'RAS here',
+            'Here is the message.',
+            'info@r707.ir',
+            ['r.ahmadifar.1377@gmail.com'],
+            fail_silently=False,
+        )
+        return Response(True)
 
     def get(self, request, format=None):
         queryset = Software.objects.filter(

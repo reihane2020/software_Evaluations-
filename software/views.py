@@ -63,9 +63,16 @@ class InviteToMySoftwareView(APIView):
 
     def post(self, request, format=None):
         mydata = json.loads(request.body)
-        _projects = mydata['projects']
+        _project = mydata['projects']
         _user = mydata['user']
-        return Response(_projects)
+
+
+        project = Software.objects.get(id=_project)
+        user = Software.objects.get(id=_user)
+
+
+
+        return Response(user)
 
     def get(self, request, format=None):
         queryset = Software.objects.filter(

@@ -166,7 +166,12 @@ class MetricResultSerializer(serializers.ModelSerializer):
                         'evaluated_by': d['evaluated_by'],
                         'datetime': d['datetime'],
                     }
-        return data
+
+        final = []
+        for key, value in data.items():
+            final.append(value)
+
+        return final
         
 
     class Meta:

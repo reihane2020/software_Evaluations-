@@ -141,7 +141,6 @@ class MetricResultSerializer(serializers.ModelSerializer):
     def byList(self, obj):
         cc = MetricEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = MetricEvaluateForResultSerializer(cc, many=True)
-
         data = {}
         for d in ss.data:
             res = d['result']
@@ -166,11 +165,9 @@ class MetricResultSerializer(serializers.ModelSerializer):
                         'evaluated_by': d['evaluated_by'],
                         'datetime': d['datetime'],
                     }
-
         final = []
         for key, value in data.items():
             final.append(value)
-
         return final
         
 

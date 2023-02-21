@@ -88,7 +88,7 @@ class CompareEvaluateForResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CompareEvaluateResult
-        fields = ['id', 'result', 'evaluated_by']
+        fields = ['id', 'result', 'evaluated_by', 'datetime']
         depth = 2
 
 
@@ -96,6 +96,7 @@ class CompareResultSerializer(serializers.ModelSerializer):
 
     by_degree = serializers.SerializerMethodField("byDegreeData")
     by_parameter = serializers.SerializerMethodField("byParameterData")
+    by_list = serializers.SerializerMethodField("byList")
 
     def byDegreeData(self, obj):
         cc = CompareEvaluateResult.objects.filter(evaluate=obj.pk)
@@ -127,6 +128,38 @@ class CompareResultSerializer(serializers.ModelSerializer):
                     }
         return data
 
+    def byList(self, obj):
+        cc = CompareEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = CompareEvaluateForResultSerializer(cc, many=True)
+        data = {}
+        for d in ss.data:
+            res = d['result']
+            for r in res:
+                try:
+                    if data[d['evaluated_by']['id']]:
+                        data[d['evaluated_by']['id']]['parameters'].append({
+                            'id': r['parameter']['id'],
+                            'title': r['parameter']['title'],
+                            'value': {"soft": r['main'], "target": r['target']},
+                        })
+                except:
+                    data[d['evaluated_by']['id']] = {
+                        'id': d['id'],
+                        'parameters': [
+                            {
+                                'id': r['parameter']['id'],
+                                'title': r['parameter']['title'],
+                                'value': {"soft": r['main'], "target": r['target']},
+                            }
+                        ],
+                        'evaluated_by': d['evaluated_by'],
+                        'datetime': d['datetime'],
+                    }
+        final = []
+        for key, value in data.items():
+            final.append(value)
+        return final
+
     class Meta:
         model = CompareEvaluate
         fields = [
@@ -141,6 +174,7 @@ class CompareResultSerializer(serializers.ModelSerializer):
             'max',
             'is_active',
             'by_degree',
-            'by_parameter'
+            'by_parameter',
+            'by_list'
         ]
         depth = 1

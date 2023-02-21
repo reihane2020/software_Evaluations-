@@ -2,6 +2,7 @@ from software.serializers import SoftwareSerializer
 from metric_evaluation.serializers import MetricCategorySerializer, MetricParameterSerializer
 from .models import *
 from rest_framework import serializers
+from authentication.serializers import UserDataEvaluateResultSerializer
 
 
 class CompareEvaluateSerializer(serializers.ModelSerializer):
@@ -82,6 +83,8 @@ class CompareEvaluationSerializer(serializers.ModelSerializer):
 
 
 class CompareEvaluateForResultSerializer(serializers.ModelSerializer):
+
+    evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
 
     class Meta:
         model = CompareEvaluateResult

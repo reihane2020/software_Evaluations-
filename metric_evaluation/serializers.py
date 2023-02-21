@@ -94,6 +94,8 @@ class MetricEvaluationSerializer(serializers.ModelSerializer):
 
 class MetricEvaluateForResultSerializer(serializers.ModelSerializer):
 
+    evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
+
     class Meta:
         model = MetricEvaluateResult
         fields = ['id', 'result', 'evaluated_by', 'datetime']
@@ -139,7 +141,33 @@ class MetricResultSerializer(serializers.ModelSerializer):
     def byList(self, obj):
         cc = MetricEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = MetricEvaluateForResultSerializer(cc, many=True)
-        return ss.data
+
+        data = {}
+        for d in ss.data:
+            res = d['result']
+            for r in res:
+                try:
+                    if data[d['evaluated_by']['id']]:
+                        data[d['evaluated_by']['id']]['parameters'].append({
+                            'id': r['parameter']['id'],
+                            'title': r['parameter']['title'],
+                            'value': r['value'],
+                        })
+                except:
+                    data[d['evaluated_by']['id']] = {
+                        'id': d['id'],
+                        'parameters': [
+                            {
+                                'id': r['parameter']['id'],
+                                'title': r['parameter']['title'],
+                                'value': r['value'],
+                            }
+                        ],
+                        'evaluated_by': d['evaluated_by'],
+                        'datetime': d['datetime'],
+                    }
+        return data
+        
 
     class Meta:
         model = MetricEvaluate

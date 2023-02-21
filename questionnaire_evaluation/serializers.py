@@ -1,5 +1,6 @@
 from .models import *
 from rest_framework import serializers
+from authentication.serializers import UserDataEvaluateResultSerializer
 from software.serializers import SoftwareSerializer
 
 
@@ -97,6 +98,8 @@ class QuestionnaireEvaluationSerializer(serializers.ModelSerializer):
 
 
 class QuestionnaireEvaluateForResultSerializer(serializers.ModelSerializer):
+
+    evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
 
     class Meta:
         model = QuestionnaireEvaluateResult

@@ -74,7 +74,7 @@ class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CommentEvaluateResult
-        fields = ['id', 'comment', 'evaluated_by']
+        fields = ['id', 'comment', 'evaluated_by', 'datetime']
         depth = 2
 
 

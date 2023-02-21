@@ -74,7 +74,7 @@ class RatingEvaluateForResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RatingEvaluateResult
-        fields = ['id', 'rating', 'evaluated_by']
+        fields = ['id', 'rating', 'evaluated_by', 'datetime']
         depth = 2
 
 

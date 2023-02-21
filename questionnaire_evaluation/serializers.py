@@ -214,6 +214,7 @@ class QuestionnaireResultSerializer(serializers.ModelSerializer):
             'max',
             'is_active',
             'by_degree',
-            'by_parameter'
+            'by_parameter',
+            'by_list'
         ]
         depth = 1

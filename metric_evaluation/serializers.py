@@ -96,7 +96,7 @@ class MetricEvaluateForResultSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MetricEvaluateResult
-        fields = ['id', 'result', 'evaluated_by']
+        fields = ['id', 'result', 'evaluated_by', 'datetime']
         depth = 2
 
 
@@ -104,6 +104,8 @@ class MetricResultSerializer(serializers.ModelSerializer):
 
     by_degree = serializers.SerializerMethodField("byDegreeData")
     by_parameter = serializers.SerializerMethodField("byParameterData")
+    by_list = serializers.SerializerMethodField("byList")
+
 
     def byDegreeData(self, obj):
         cc = MetricEvaluateResult.objects.filter(evaluate=obj.pk)
@@ -134,6 +136,11 @@ class MetricResultSerializer(serializers.ModelSerializer):
                     }
         return data
 
+    def byList(self, obj):
+        cc = MetricEvaluateResult.objects.filter(evaluate=obj.pk)
+        ss = MetricEvaluateForResultSerializer(cc, many=True)
+        return ss.data
+
     class Meta:
         model = MetricEvaluate
         fields = [
@@ -148,6 +155,7 @@ class MetricResultSerializer(serializers.ModelSerializer):
             'max',
             'is_active',
             'by_degree',
-            'by_parameter'
+            'by_parameter',
+            'by_list'
         ]
         depth = 1

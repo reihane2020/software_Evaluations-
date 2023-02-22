@@ -12,13 +12,14 @@ class UserEvaluationScoreSerializer(serializers.ModelSerializer):
         source='user'
     )
 
-    
+
 
     class Meta:
         model = UserEvaluationScore
         fields = [
             'id',
             'user',
+            'user_id',
             'metric',
             'comment',
             'rating',

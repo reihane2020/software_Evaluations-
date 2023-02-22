@@ -40,7 +40,7 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
     )
 
     degree_id = serializers.PrimaryKeyRelatedField(
-        queryset=Image.objects.all(),
+        queryset=Degree.objects.all(),
         source='degree'
     )
 

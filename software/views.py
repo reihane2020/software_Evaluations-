@@ -73,8 +73,8 @@ class InviteToMySoftwareView(APIView):
         user = Account.objects.get(id=_user)
 
         send_mail(
-            'RAS here',
-            'Here is the message.',
+            'You invited to evaluate ' + project.name,
+            'You invited to evaluate a software.\nSoftware name: ' + project.name + '\n' + '<a href="https://evaluation.iran.liara.run/evaluate/' + project.id + '">Click here</a>',
             'evaluation@mail.rasoul707.ir',
             [user.email],
             fail_silently=False,

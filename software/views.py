@@ -74,7 +74,7 @@ class InviteToMySoftwareView(APIView):
 
         send_mail(
             'You invited to evaluate ' + project.name,
-            'You invited to evaluate a software.\nSoftware name: ' + project.name + '\n' + '<a href="https://evaluation.iran.liara.run/evaluate/' + str(project.id) + '">Click here</a>',
+            'You invited to evaluate a software.\nSoftware name: ' + project.name + '\n' + 'https://evaluation.iran.liara.run/evaluate/' + str(project.id),
             'evaluation@mail.rasoul707.ir',
             [user.email],
             fail_silently=False,

@@ -6,11 +6,8 @@ from authentication.models import Account
 
 class UserEvaluationScoreSerializer(serializers.ModelSerializer):
 
-    user = UserDataEvaluateResultSerializer(read_only=True)
-    user_id = serializers.PrimaryKeyRelatedField(
-        queryset=Account.objects.all(),
-        source='user'
-    )
+    
+    
 
 
 
@@ -19,7 +16,6 @@ class UserEvaluationScoreSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'user',
-            'user_id',
             'metric',
             'comment',
             'rating',
@@ -28,4 +24,3 @@ class UserEvaluationScoreSerializer(serializers.ModelSerializer):
             'score',
             'datetime',
         ]
-        depth = 1

@@ -75,8 +75,8 @@ class InviteToMySoftwareView(APIView):
         send_mail(
             'RAS here',
             'Here is the message.',
-            'info@r707.ir',
-            ['r.ahmadifar.1377@gmail.com'],
+            'evaluation@mail.rasoul707.ir',
+            [user.email],
             fail_silently=False,
         )
         return Response(True)

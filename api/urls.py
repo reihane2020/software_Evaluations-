@@ -36,4 +36,6 @@ urlpatterns = [
     path(r'compare/', include('compare_evaluation.urls')),
     path(r'questionnaire/', include('questionnaire_evaluation.urls')),
 
+    path(r'score/', include('evaluation_score.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

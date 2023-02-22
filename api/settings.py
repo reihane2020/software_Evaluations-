@@ -76,6 +76,8 @@ INSTALLED_APPS = [
     'rating_evaluation',
     'compare_evaluation',
     'questionnaire_evaluation',
+
+    'evaluation_score'
 ]
 
 MIDDLEWARE = [

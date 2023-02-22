@@ -214,16 +214,11 @@ class QuestionnaireResultSerializer(serializers.ModelSerializer):
 
         final = []
         for key, value in data.items():
-            pp = []
-            for _key, _value in value.parameters.items():
-                pp.append(_value)
+            # pp = []
+            # for _key, _value in value.parameters.items():
+            #     pp.append(_value)
 
-            final.append({
-                'id': value['id'],
-                'evaluated_by': value['evaluated_by'],
-                'datetime': value['datetime'],
-                'parameters': pp
-            })
+            final.append(value)
 
 
         return final

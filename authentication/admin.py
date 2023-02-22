@@ -15,6 +15,7 @@ class _UserAdmin(UserAdmin):
                 ("phone_number", "is_verified_phone"),
                 "degree",
                 "avatar",
+                "bio"
             )
         }
     ]

@@ -140,7 +140,6 @@ class QuestionnaireResultSerializer(serializers.ModelSerializer):
                 _pid = r['question']['parameter']['id']
                 _ptitle = r['question']['parameter']['title']
                 
-
                 try:
                     if data[_pid]:
                         try:
@@ -171,34 +170,48 @@ class QuestionnaireResultSerializer(serializers.ModelSerializer):
     def byList(self, obj):
         cc = QuestionnaireEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = QuestionnaireEvaluateForResultSerializer(cc, many=True)
-        # data = {}
-        # for d in ss.data:
-        #     res = d['result']
-        #     for r in res:
-        #         try:
-        #             if data[d['evaluated_by']['id']]:
-        #                 data[d['evaluated_by']['id']]['parameters'].append({
-        #                     'id': r['parameter']['id'],
-        #                     'title': r['parameter']['title'],
-        #                     'value': r['value'],
-        #                 })
-        #         except:
-        #             data[d['evaluated_by']['id']] = {
-        #                 'id': d['id'],
-        #                 'parameters': [
-        #                     {
-        #                         'id': r['parameter']['id'],
-        #                         'title': r['parameter']['title'],
-        #                         'value': r['value'],
-        #                     }
-        #                 ],
-        #                 'evaluated_by': d['evaluated_by'],
-        #                 'datetime': d['datetime'],
-        #             }
-        # final = []
-        # for key, value in data.items():
-        #     final.append(value)
-        return ss.data
+        data = {}
+        for d in ss.data:
+            res = d['result']
+            for r in res:
+                _answer = r['answer']
+                _qid = r['question']['id']
+                _qtitle = r['question']['question']
+                _qcustom_options = r['question']['custom_options']
+                _qoptions = r['question']['options']
+                _pid = r['question']['parameter']['id']
+                _ptitle = r['question']['parameter']['title']
+
+
+                try:
+                    if data[d['evaluated_by']['id']]:
+                        data[d['evaluated_by']['id']]['parameters'][_pid]['questions'].append({
+                            'question': _qtitle,
+                            'custom_options': _qcustom_options,
+                            'options': _qoptions,
+                            'answer': _answer
+                        })
+                except:
+                    data[d['evaluated_by']['id']] = {
+                        'id': d['id'],
+                        'evaluated_by': d['evaluated_by'],
+                        'datetime': d['datetime'],
+                        'parameters': {
+                            [_pid]: {
+                                'id': _pid,
+                                'name': _ptitle,
+                                'questions': [
+                                    {
+                                        'question': _qtitle,
+                                        'custom_options': _qcustom_options,
+                                        'options': _qoptions,
+                                        'answer': _answer
+                                    }
+                                ]
+                            }
+                        }
+                    }
+        return data
 
     class Meta:
         model = QuestionnaireEvaluate

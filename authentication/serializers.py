@@ -89,7 +89,8 @@ class CustomUserDetailSerializer(UserDetailsSerializer):
             'score_freeze',
             'stars',
             'is_verified',
-            'evaluator_scores'
+            'evaluator_scores',
+            'bio'
         ]
 
 
@@ -112,7 +113,8 @@ class UserDataEvaluateResultSerializer(UserDetailsSerializer):
             'stars',
             'is_verified',
             'user_level',
-            'evaluator_scores'
+            'evaluator_scores',
+            'bio'
         ]
 
 

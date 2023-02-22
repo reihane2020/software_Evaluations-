@@ -1,8 +1,0 @@
-{
-  "name": "software_evaluation_api",
-  "version": "1.2.0",
-  "private": true,
-  "scripts": {
-    "start": "source ./venv/bin/activate && python3 manage.py runserver"
-  }
-}

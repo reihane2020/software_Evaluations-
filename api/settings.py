@@ -35,7 +35,8 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = [
     'https://api.evaluation.r707.ir',
-    'https://evaluationapi.r707.ir'
+    'https://evaluationapi.r707.ir',
+    "https://evaluationapi.iran.liara.run"
 ]
 
 # Application definition
@@ -185,14 +186,13 @@ REST_FRAMEWORK = {
 
 # email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.r707.ir'
-EMAIL_HOST_USER = 'info@r707.ir'
-EMAIL_HOST_PASSWORD = '1W2E3r#!'
-DEFAULT_FROM_EMAIL = 'info@r707.ir'
-EMAIL_USE_TLS = False
-# EMAIL_PORT = '25'
-# EMAIL_SUBJECT_PREFIX = 'R707'
-# EMAIL_USE_SSL = True
+EMAIL_HOST = 'smtp.liara.ir'
+EMAIL_HOST_USER = 'w2pKBrdLlaqCw9Qo'
+EMAIL_HOST_PASSWORD = 'c8110099-9097-4eef-8b59-06553b55851d'
+DEFAULT_FROM_EMAIL = 'evaluation@mail.rasoul707.ir'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
 
 
 
@@ -210,6 +210,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "https://evaluation.r707.ir",
     "https://eval.r707.ir",
+    "https://evaluation.iran.liara.run"
 ]
 
 # USE_X_FORWARDED_HOST = True

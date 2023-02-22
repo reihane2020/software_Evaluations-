@@ -99,7 +99,7 @@ class Account(AbstractUser):
     # )
 
     user_level = models.CharField(
-        max_length=100, choices=UserLevels, default='level1'
+        max_length=100, choices=UserLevels, default='level2'
     )
 
     score = models.PositiveSmallIntegerField(default=0)

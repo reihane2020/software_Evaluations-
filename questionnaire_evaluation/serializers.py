@@ -197,7 +197,7 @@ class QuestionnaireResultSerializer(serializers.ModelSerializer):
                         'evaluated_by': d['evaluated_by'],
                         'datetime': d['datetime'],
                         'parameters': {
-                            [_pid]: {
+                            _pid: {
                                 'id': _pid,
                                 'name': _ptitle,
                                 'questions': [

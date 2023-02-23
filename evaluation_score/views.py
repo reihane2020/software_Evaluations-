@@ -11,9 +11,9 @@ class UserEvaluationScoreViewSet(viewsets.ModelViewSet):
     filterset_fields = ['user', 'metric', 'comment', 'rating', 'compare', 'questionnaire']
 
 
-    def perform_create(self, serializer):
-        usr=Account.objects.get(
-            id = self.request.data['user']
-        )
-        usr.stars = 2
-        usr.save()
+    # def perform_create(self, serializer):
+    #     usr=Account.objects.get(
+    #         id = self.request.data['user']
+    #     )
+    #     usr.stars = 2
+    #     usr.save()

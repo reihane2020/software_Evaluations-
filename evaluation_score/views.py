@@ -13,7 +13,7 @@ class UserEvaluationScoreViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         usr=Account.objects.get(
-            id = final = self.request.data['user']
+            id = self.request.data['user']
         )
-        usr.starts = 2
+        usr.stars = 2
         usr.save()

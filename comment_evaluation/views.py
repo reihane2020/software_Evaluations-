@@ -9,6 +9,8 @@ from rest_framework.exceptions import APIException
 from django.db.models import F
 from rest_framework.response import Response
 from rest_framework import status
+from notification.models import Notification
+
 # Create your views here.
 
 
@@ -183,6 +185,11 @@ class CommentEvaluationViewSet(viewsets.ModelViewSet):
         ev = CommentEvaluate.objects.get(
             id=self.request.data['evaluate_id']
         )
+        if ev.evaluates >= ev.max:
+            raise APIException(
+                code="EVALUATION_FINISHED_COUNT",
+                detail=f"This evaluation's users count completed"
+            )
         result, created = CommentEvaluateResult.objects.get_or_create(
             evaluate=ev,
             evaluated_by=self.request.user,
@@ -203,6 +210,16 @@ class CommentEvaluationViewSet(viewsets.ModelViewSet):
             except:
                 pass
             #### score eval
+
+
+            #### Notification
+            if ev.evaluates >= ev.max:
+                Notification.objects.create(
+                    user=_user,
+                    title=f"Your Comment evaluation is complete",
+                    content=f"Your Comment evaluation for {ins.software.name} is complete",
+                    url="#"
+                )
 
             
             ev.save()

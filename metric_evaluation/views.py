@@ -11,6 +11,7 @@ from django.db.models import F
 from rest_framework.response import Response
 from rest_framework import status
 import math   
+from notification.models import Notification
 
 # Create your views here.
 
@@ -196,6 +197,11 @@ class MetricEvaluationViewSet(viewsets.ModelViewSet):
         ev = MetricEvaluate.objects.get(
             id=self.request.data['evaluate_id']
         )
+        if ev.evaluates >= ev.max:
+            raise APIException(
+                code="EVALUATION_FINISHED_COUNT",
+                detail=f"This evaluation's users count completed"
+            )
         result, created = MetricEvaluateResult.objects.get_or_create(
             evaluate=ev,
             evaluated_by=self.request.user,
@@ -220,8 +226,17 @@ class MetricEvaluationViewSet(viewsets.ModelViewSet):
             except:
                 pass
             #### score eval
-
+            
             ev.save()
+
+            #### Notification
+            if ev.evaluates >= ev.max:
+                Notification.objects.create(
+                    user=_user,
+                    title=f"Your Metric evaluation is complete",
+                    content=f"Your Metric evaluation for {ins.software.name} is complete",
+                    url="#"
+                )
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

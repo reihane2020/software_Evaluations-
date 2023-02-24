@@ -9,6 +9,8 @@ from django.db.models import F
 from metric_evaluation.models import MetricParameter
 from rest_framework.response import Response
 from rest_framework import status
+from notification.models import Notification
+
 
 # Create your views here.
 
@@ -183,6 +185,11 @@ class CompareEvaluationViewSet(viewsets.ModelViewSet):
         ev = CompareEvaluate.objects.get(
             id=self.request.data['evaluate_id']
         )
+        if ev.evaluates >= ev.max:
+            raise APIException(
+                code="EVALUATION_FINISHED_COUNT",
+                detail=f"This evaluation's users count completed"
+            )
         result, created = CompareEvaluateResult.objects.get_or_create(
             evaluate=ev,
             evaluated_by=self.request.user,
@@ -210,6 +217,15 @@ class CompareEvaluationViewSet(viewsets.ModelViewSet):
             except:
                 pass
             #### score eval
+
+            #### Notification
+            if ev.evaluates >= ev.max:
+                Notification.objects.create(
+                    user=_user,
+                    title=f"Your Compare evaluation is complete",
+                    content=f"Your Compare evaluation for {ins.software.name} is complete",
+                    url="#"
+                )
 
             
             ev.save()

@@ -78,7 +78,8 @@ INSTALLED_APPS = [
     'questionnaire_evaluation',
 
     'evaluation_score',
-    'notification'
+    'notification',
+    'comment_reply'
 ]
 
 MIDDLEWARE = [

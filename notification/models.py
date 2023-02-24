@@ -8,7 +8,7 @@ class Notification(models.Model):
         blank=False,
         null=False
     )
-    title = models.TextField(max_length=256,)
+    title = models.CharField(max_length=256,)
     content = models.TextField(default='')
     url = models.CharField(max_length=256,)
     datetime = models.DateTimeField(auto_now_add=True)

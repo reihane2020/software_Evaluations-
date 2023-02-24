@@ -62,7 +62,7 @@ class UserEvaluationScore(models.Model):
 def user_score(sender, instance, **kwargs):
     _score = instance.score
     _user = instance.user
-    
+
     if _user.stars == 0:
         _count = 0
     else:
@@ -70,19 +70,14 @@ def user_score(sender, instance, **kwargs):
 
     _setting = Setting.objects.get(pk=1)
     if instance.metric:
-        print("metric")
         _ratio = _setting.metric_score_ratio
     if instance.comment:
-        print("comment")
         _ratio = _setting.comment_score_ratio
     if instance.rating:
-        print("rating")
         _ratio = _setting.rating_score_ratio
     if instance.compare:
-        print("compare")
         _ratio = _setting.compare_score_ratio
     if instance.questionnaire:
-        print("questionnaire")
         _ratio = _setting.questionnaire_score_ratio
 
 

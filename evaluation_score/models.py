@@ -97,12 +97,10 @@ def user_score(sender, instance, **kwargs):
     _user.stars = _user.evaluator_scores / (_count + _ratio)
     _user.save()
 
-    print(ins.software)
-
     Notification.objects.create(
         user=_user,
         title=f"You got {_point} points",
-        content=f"You got {_point} points for {evalType} evaluation of ",
+        content=f"You got {_point} points for {evalType} evaluation of {ins.software.name}",
         url="#"
     )
     pass

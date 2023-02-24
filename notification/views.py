@@ -15,7 +15,7 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
             Notification.objects.filter(
                 user=self.request.user,
             )[0:20]
-        )
+        ).order_by("-id")
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 

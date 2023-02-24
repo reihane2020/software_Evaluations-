@@ -10,5 +10,8 @@
             "name": "media",
             "mountTo": "media"
         }
+    ],
+    "cron": [
+        "*/5 * * * * cd $ROOT && python3 manage.py checkEvaluationTime >> /dev/null 2>&1"
     ]
 }

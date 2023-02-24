@@ -18,3 +18,7 @@ class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
         )
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+
+

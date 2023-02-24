@@ -213,7 +213,7 @@ class CommentEvaluationViewSet(viewsets.ModelViewSet):
 
             ev.save()
 
-            
+
             #### Notification
             if ev.evaluates >= ev.max:
                 Notification.objects.create(
@@ -224,8 +224,8 @@ class CommentEvaluationViewSet(viewsets.ModelViewSet):
                 )
 
                 send_mail(
-                    'Your Metric evaluation is complete ' + ev.software.name,
-                    'Your Metric evaluation is complete .\nSoftware name: ' + ev.software.name,
+                    'Your Comment evaluation is complete ' + ev.software.name,
+                    'Your Comment evaluation is complete .\nSoftware name: ' + ev.software.name,
                     'evaluation@mail.rasoul707.ir',
                     [ev.software.created_by.email],
                     fail_silently=False,

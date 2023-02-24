@@ -231,8 +231,8 @@ class CompareEvaluationViewSet(viewsets.ModelViewSet):
                 )
 
                 send_mail(
-                    'Your Metric evaluation is complete ' + ev.software.name,
-                    'Your Metric evaluation is complete .\nSoftware name: ' + ev.software.name,
+                    'Your Compare evaluation is complete ' + ev.software.name,
+                    'Your Compare evaluation is complete .\nSoftware name: ' + ev.software.name,
                     'evaluation@mail.rasoul707.ir',
                     [ev.software.created_by.email],
                     fail_silently=False,

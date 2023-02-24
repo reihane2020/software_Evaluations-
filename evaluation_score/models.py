@@ -62,28 +62,30 @@ class UserEvaluationScore(models.Model):
 def user_score(sender, instance, **kwargs):
     _score = instance.score
     uid = instance.user
-    _user = Account.objects.get(id=uid)
-    _count = _user.evaluator_scores / _user.stars
+    print(_score)
+    print(uid)
+    # _user = Account.objects.get(id=uid)
+    # _count = _user.evaluator_scores / _user.stars
 
-    _setting = Setting.objects.get(pk=1)
-    if instance.metric:
-        print("metric")
-        _ratio = _setting.metric_score_ratio
-    if instance.comment:
-        print("comment")
-        _ratio = _setting.comment_score_ratio
-    if instance.rating:
-        print("rating")
-        _ratio = _setting.rating_score_ratio
-    if instance.compare:
-        print("compare")
-        _ratio = _setting.compare_score_ratio
-    if instance.questionnaire:
-        print("questionnaire")
-        _ratio = _setting.questionnaire_score_ratio
+    # _setting = Setting.objects.get(pk=1)
+    # if instance.metric:
+    #     print("metric")
+    #     _ratio = _setting.metric_score_ratio
+    # if instance.comment:
+    #     print("comment")
+    #     _ratio = _setting.comment_score_ratio
+    # if instance.rating:
+    #     print("rating")
+    #     _ratio = _setting.rating_score_ratio
+    # if instance.compare:
+    #     print("compare")
+    #     _ratio = _setting.compare_score_ratio
+    # if instance.questionnaire:
+    #     print("questionnaire")
+    #     _ratio = _setting.questionnaire_score_ratio
 
 
-    _user.evaluator_scores =  _user.evaluator_scores + (_score * _ratio)
-    _user.stars = _user.evaluator_scores / (_count + _ratio)
-    _user.save()
+    # _user.evaluator_scores =  _user.evaluator_scores + (_score * _ratio)
+    # _user.stars = _user.evaluator_scores / (_count + _ratio)
+    # _user.save()
     pass

@@ -37,5 +37,6 @@ urlpatterns = [
     path(r'questionnaire/', include('questionnaire_evaluation.urls')),
 
     path(r'score/', include('evaluation_score.urls')),
+    path(r'notification/', include('notification.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -11,4 +11,11 @@ class Setting(models.Model):
     evaluation_score = models.PositiveSmallIntegerField(default=5)
     peopleneed_score = models.PositiveSmallIntegerField(default=5)
 
+    metric_score_ratio = models.PositiveSmallIntegerField(default=1)
+    rating_score_ratio = models.PositiveSmallIntegerField(default=1)
+    comment_score_ratio = models.PositiveSmallIntegerField(default=2)
+    compare_score_ratio = models.PositiveSmallIntegerField(default=2)
+    questionnaire_score_ratio = models.PositiveSmallIntegerField(default=3)
+
+
     edit = "Edit"

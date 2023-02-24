@@ -19,6 +19,11 @@ class SettingAdmin(admin.ModelAdmin):
         'referral_score',
         'evaluation_score',
         'peopleneed_score',
+        'metric_score_ratio',
+        'rating_score_ratio',
+        'comment_score_ratio',
+        'compare_score_ratio',
+        'questionnaire_score_ratio',
         'edit'
     ]
     list_display_links = ['edit']
@@ -29,6 +34,11 @@ class SettingAdmin(admin.ModelAdmin):
         'referral_score',
         'peopleneed_score',
         'evaluation_score',
+        'metric_score_ratio',
+        'rating_score_ratio',
+        'comment_score_ratio',
+        'compare_score_ratio',
+        'questionnaire_score_ratio',
     ]
 
 

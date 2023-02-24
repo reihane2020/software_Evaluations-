@@ -1,6 +1,9 @@
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from authentication.models import Account
+from setting.models import Setting
+
 
 
 
@@ -57,8 +60,30 @@ class UserEvaluationScore(models.Model):
 
 @receiver(post_save, sender=UserEvaluationScore)
 def user_score(sender, instance, **kwargs):
-    print("###@@@1", sender)
-    print("###@@@2", instance)
-    print("###@@@3", kwargs)
+    _score = instance.score
+    uid = instance.user
+    _user = Account.objects.get(id=uid)
+    _count = _user.evaluator_scores / _user.stars
 
+    _setting = Setting.objects.get(pk=1)
+    if instance.metric:
+        print("metric")
+        _ratio = _setting.metric_score_ratio
+    if instance.comment:
+        print("comment")
+        _ratio = _setting.comment_score_ratio
+    if instance.rating:
+        print("rating")
+        _ratio = _setting.rating_score_ratio
+    if instance.compare:
+        print("compare")
+        _ratio = _setting.compare_score_ratio
+    if instance.questionnaire:
+        print("questionnaire")
+        _ratio = _setting.questionnaire_score_ratio
+
+
+    _user.evaluator_scores =  _user.evaluator_scores + (_score * _ratio)
+    _user.stars = _user.evaluator_scores / (_count + _ratio)
+    _user.save()
     pass

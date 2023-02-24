@@ -62,7 +62,6 @@ class UserEvaluationScore(models.Model):
 def user_score(sender, instance, **kwargs):
     _score = instance.score
     _user = instance.user
-    _user = Account.objects.get(id=uid)
     _count = _user.evaluator_scores / _user.stars
 
     _setting = Setting.objects.get(pk=1)

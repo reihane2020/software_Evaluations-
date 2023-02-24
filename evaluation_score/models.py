@@ -91,7 +91,7 @@ def user_score(sender, instance, **kwargs):
     _user.stars = _user.evaluator_scores / (_count + _ratio)
     _user.save()
 
-    print(instance.metric)
+    print(instance.questionnaire)
 
     Notification.objects.create(
         user=_user,

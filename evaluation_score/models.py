@@ -70,33 +70,39 @@ def user_score(sender, instance, **kwargs):
 
     _setting = Setting.objects.get(pk=1)
     evalType = "-"
+    ins = None
     if instance.metric:
         _ratio = _setting.metric_score_ratio
         evalType = "metric"
+        ins = instance.metric
     if instance.comment:
         _ratio = _setting.comment_score_ratio
         evalType = "comment"
+        ins = instance.comment
     if instance.rating:
         _ratio = _setting.rating_score_ratio
         evalType = "rating"
+        ins = instance.rating
     if instance.compare:
         _ratio = _setting.compare_score_ratio
         evalType = "compare"
+        ins = instance.compare
     if instance.questionnaire:
         _ratio = _setting.questionnaire_score_ratio
         evalType = "questionnaire"
+        ins = instance.questionnaire
 
-
-    _user.evaluator_scores =  _user.evaluator_scores + (_score * _ratio)
+    _point = (_score * _ratio)
+    _user.evaluator_scores =  _user.evaluator_scores + _point
     _user.stars = _user.evaluator_scores / (_count + _ratio)
     _user.save()
 
-    print(instance.questionnaire)
+    print(ins.software)
 
     Notification.objects.create(
         user=_user,
-        title=f"You got {_score} points",
-        content=f"You got {_score} points for {evalType} evaluation of ",
+        title=f"You got {_point} points",
+        content=f"You got {_point} points for {evalType} evaluation of ",
         url="#"
     )
     pass

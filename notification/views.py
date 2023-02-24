@@ -1,10 +1,9 @@
 from .models import *
 from .serializers import *
 from rest_framework import viewsets
-from authentication.models import Account
 
 # Create your views here.
-class NotificationViewSet(viewsets.ModelViewSet):
+class NotificationViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = NotificationSerializer
     queryset = Notification.objects.all()
 

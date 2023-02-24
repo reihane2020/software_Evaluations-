@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models.signals import post_save
+from django.dispatch import receiver
+
 
 
 SubjectChoices = (
@@ -52,10 +54,8 @@ class UserEvaluationScore(models.Model):
     score = models.SmallIntegerField()
     datetime = models.DateTimeField(auto_now_add=True)
 
-    # ...
-    @classmethod
-    def post_create(cls, sender, instance, created, *args, **kwargs):
-        if created:
-            print("Doneeee")
-            return
 
+@receiver(post_save, sender=UserEvaluationScore)
+def user_score(sender, **kwargs):
+    print("###@@@")
+    pass

@@ -17,3 +17,6 @@ class UserEvaluationScoreViewSet(viewsets.ModelViewSet):
     #     )
     #     usr.stars = 2
     #     usr.save()
+
+
+

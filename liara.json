@@ -12,6 +12,6 @@
         }
     ],
     "cron": [
-        "*/5 * * * * cd $ROOT && python3 manage.py checkEvaluationTime >> /dev/null 2>&1"
+        "0 0 * * * cd $ROOT && python3 manage.py checkEvaluationTime >> /dev/null 2>&1"
     ]
 }

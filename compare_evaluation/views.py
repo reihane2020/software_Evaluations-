@@ -11,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from notification.models import Notification
 from django.core.mail import send_mail
+from django.utils import timezone
 
 # Create your views here.
 
@@ -219,10 +220,11 @@ class CompareEvaluationViewSet(viewsets.ModelViewSet):
             #### score eval
 
 
-            ev.save()
-
             #### Notification
             if ev.evaluates >= ev.max:
+
+                ev.completed_datetime=timezone.now()
+                
                 Notification.objects.create(
                     user=_user,
                     title=f"Your Compare evaluation is complete",
@@ -237,6 +239,9 @@ class CompareEvaluationViewSet(viewsets.ModelViewSet):
                     [ev.software.created_by.email],
                     fail_silently=False,
                 )
+
+            ev.save()
+
 
             
             

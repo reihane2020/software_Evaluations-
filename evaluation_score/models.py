@@ -56,6 +56,9 @@ class UserEvaluationScore(models.Model):
 
 
 @receiver(post_save, sender=UserEvaluationScore)
-def user_score(sender, **kwargs):
-    print("###@@@")
+def user_score(sender, instance, **kwargs):
+    print("###@@@1", sender)
+    print("###@@@2", instance)
+    print("###@@@3", kwargs)
+
     pass

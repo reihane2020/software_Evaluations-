@@ -12,6 +12,8 @@ from rest_framework.response import Response
 from rest_framework import status
 import math   
 from notification.models import Notification
+from django.core.mail import send_mail
+
 
 # Create your views here.
 
@@ -234,8 +236,16 @@ class MetricEvaluationViewSet(viewsets.ModelViewSet):
                 Notification.objects.create(
                     user=_user,
                     title=f"Your Metric evaluation is complete",
-                    content=f"Your Metric evaluation for {ins.software.name} is complete",
+                    content=f"Your Metric evaluation for {ev.software.name} is complete",
                     url="#"
+                )
+
+                send_mail(
+                    'Your Metric evaluation is complete ' + ev.software.name,
+                    'Your Metric evaluation is complete .\nSoftware name: ' + ev.software.name,
+                    'evaluation@mail.rasoul707.ir',
+                    [ev.software.created_by.email],
+                    fail_silently=False,
                 )
 
     def create(self, request, *args, **kwargs):

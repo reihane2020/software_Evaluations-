@@ -10,7 +10,7 @@ from django.db.models import F
 from rest_framework.response import Response
 from rest_framework import status
 from notification.models import Notification
-
+from django.core.mail import send_mail
 # Create your views here.
 
 
@@ -211,18 +211,28 @@ class CommentEvaluationViewSet(viewsets.ModelViewSet):
                 pass
             #### score eval
 
+            ev.save()
 
+            
             #### Notification
             if ev.evaluates >= ev.max:
                 Notification.objects.create(
                     user=_user,
                     title=f"Your Comment evaluation is complete",
-                    content=f"Your Comment evaluation for {ins.software.name} is complete",
+                    content=f"Your Comment evaluation for {ev.software.name} is complete",
                     url="#"
                 )
 
+                send_mail(
+                    'Your Metric evaluation is complete ' + ev.software.name,
+                    'Your Metric evaluation is complete .\nSoftware name: ' + ev.software.name,
+                    'evaluation@mail.rasoul707.ir',
+                    [ev.software.created_by.email],
+                    fail_silently=False,
+                )
+
             
-            ev.save()
+            
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

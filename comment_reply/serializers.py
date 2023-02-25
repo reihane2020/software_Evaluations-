@@ -23,16 +23,8 @@ class CommentEvaluateForReplySerializer(serializers.ModelSerializer):
     reply_count = serializers.SerializerMethodField("getreply")
 
     def getreply(self, obj):
-        print("cc")
-        cc = CommentReply.objects.filter(parent=obj.pk)
-        # ss = CommentReplySerializer(cc, many=True)
-        print(cc)
-        print("obj.pk")
-        print(obj)
-        print(obj.id)
-        print(obj.pk)
-        # print(cc)
-        return 55
+        cc = CommentReply.objects.filter(parent=obj.pk).count()
+        return cc
 
     class Meta:
         model = CommentEvaluateResult

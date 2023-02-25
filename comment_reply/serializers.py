@@ -26,6 +26,7 @@ class CommentEvaluateForReplySerializer(serializers.ModelSerializer):
         print("cc")
         cc = CommentReply.objects.filter(parent=obj.pk)
         # ss = CommentReplySerializer(cc, many=True)
+        print(cc)
         print("obj.pk")
         print(obj)
         print(obj.id)

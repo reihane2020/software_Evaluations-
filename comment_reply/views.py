@@ -3,7 +3,7 @@ from .serializers import *
 from rest_framework import viewsets
 from rest_framework.response import Response
 from comment_evaluation.models import CommentEvaluateResult
-
+from rest_framework import status
 
 
 
@@ -17,7 +17,7 @@ class CommentReplyViewSet(viewsets.ModelViewSet):
         d = {
             "content": self.request.data['content'],
             "parent": self.request.data['parent'],
-            "user_id": self.request.user
+            "user_id": self.request.user.id
         }
         serializer = CommentReplySerializer(data=d)
         serializer.is_valid(raise_exception=True)

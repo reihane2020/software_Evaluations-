@@ -17,7 +17,7 @@ class CommentReplySerializer(serializers.ModelSerializer):
 
 
 
-class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
+class CommentEvaluateForReplySerializer(serializers.ModelSerializer):
 
     evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
     reply_count = serializers.SerializerMethodField("getreply")
@@ -36,25 +36,4 @@ class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
     class Meta:
         model = CommentEvaluateResult
         fields = ['id', 'comment', 'evaluated_by', 'datetime', 'reply_count']
-        depth = 1
-
-
-class CommentResultSerializer(serializers.ModelSerializer):
-
-    data = serializers.SerializerMethodField("byList")
-    
-    def byList(self, obj):
-        cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
-        ss = CommentEvaluateForResultSerializer(cc, many=True)
-        return ss.data
-    
-
-    class Meta:
-        model = CommentEvaluate
-        fields = [
-            'id',
-            'section',
-            'evaluates',
-            'data',
-        ]
         depth = 1

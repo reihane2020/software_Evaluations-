@@ -1,7 +1,9 @@
 from .models import *
 from rest_framework import serializers
 from comment_evaluation.models import CommentEvaluate, CommentEvaluateResult
-from comment_evaluation.serializers import CommentEvaluateForResultSerializer
+from authentication.serializers import UserDataEvaluateResultSerializer
+
+
 
 class CommentReplySerializer(serializers.ModelSerializer):
     class Meta:
@@ -14,20 +16,33 @@ class CommentReplySerializer(serializers.ModelSerializer):
         ]
 
 
+
+class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
+
+    evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
+    reply = serializers.SerializerMethodField("reply")
+
+    def reply(self, obj):
+        cc = CommentReply.objects.filter(parent=obj.pk)
+        ss = CommentReplySerializer(cc, many=True)
+        return ss.data
+
+    class Meta:
+        model = CommentEvaluateResult
+        fields = ['id', 'comment', 'evaluated_by', 'datetime', 'reply']
+        depth = 1
+
+
 class CommentResultSerializer(serializers.ModelSerializer):
 
     data = serializers.SerializerMethodField("byList")
-    # reply = serializers.SerializerMethodField("reply")
     
     def byList(self, obj):
         cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = CommentEvaluateForResultSerializer(cc, many=True)
         return ss.data
 
-    # def reply(self, obj):
-    #     cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
-    #     ss = CommentEvaluateForResultSerializer(cc, many=True)
-    #     return ss.data
+    
 
     class Meta:
         model = CommentEvaluate

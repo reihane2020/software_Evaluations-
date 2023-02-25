@@ -9,7 +9,7 @@ class CommentReply(models.Model):
         null=False
     )
     parent = models.ForeignKey(
-        "compare_evaluation.CompareEvaluate",
+        "compare_evaluation.CommentEvaluateResult",
         on_delete=models.CASCADE,
         blank=False,
         null=False

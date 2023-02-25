@@ -1,6 +1,6 @@
 from .models import *
 from rest_framework import serializers
-from comment_evaluation.models import CommentEvaluate
+from comment_evaluation.models import CommentEvaluate, CommentEvaluateResult
 from comment_evaluation.serializers import CommentEvaluateForResultSerializer
 
 class CommentReplySerializer(serializers.ModelSerializer):

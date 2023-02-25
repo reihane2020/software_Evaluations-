@@ -20,13 +20,14 @@ class CommentReplySerializer(serializers.ModelSerializer):
 class CommentEvaluateForReplySerializer(serializers.ModelSerializer):
 
     evaluated_by = UserDataEvaluateResultSerializer(read_only=True)
-    reply_count = serializers.SerializerMethodField("getreply")
+    reply = serializers.SerializerMethodField("getreply")
 
     def getreply(self, obj):
-        cc = CommentReply.objects.filter(parent=obj.pk).count()
-        return cc
+        cc = CommentReply.objects.filter(parent=obj.pk)
+        ss = CommentReplySerializer(cc, many=True)
+        return ss.data
 
     class Meta:
         model = CommentEvaluateResult
-        fields = ['id', 'comment', 'evaluated_by', 'datetime', 'reply_count']
+        fields = ['id', 'comment', 'evaluated_by', 'datetime', 'reply']
         depth = 1

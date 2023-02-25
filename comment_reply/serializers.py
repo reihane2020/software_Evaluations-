@@ -17,11 +17,17 @@ class CommentReplySerializer(serializers.ModelSerializer):
 class CommentResultSerializer(serializers.ModelSerializer):
 
     data = serializers.SerializerMethodField("byList")
+    # reply = serializers.SerializerMethodField("reply")
     
     def byList(self, obj):
         cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = CommentEvaluateForResultSerializer(cc, many=True)
         return ss.data
+
+    # def reply(self, obj):
+    #     cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
+    #     ss = CommentEvaluateForResultSerializer(cc, many=True)
+    #     return ss.data
 
     class Meta:
         model = CommentEvaluate
@@ -29,6 +35,7 @@ class CommentResultSerializer(serializers.ModelSerializer):
             'id',
             'section',
             'evaluates',
-            'data'
+            'data',
+
         ]
         depth = 1

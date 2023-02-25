@@ -13,13 +13,13 @@ class CommentReplyViewSet(viewsets.ReadOnlyModelViewSet):
     filterset_fields = ['software']
 
 
-    # def list(self, request, *args, **kwargs):
-    #     queryset = self.filter_queryset(
-    #         Notification.objects.filter(
-    #             user=self.request.user,
-    #         ).order_by("-id")[0:20]
-    #     )
-    #     serializer = self.get_serializer(queryset, many=True)
-    #     return Response(serializer.data)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(
+            CommentEvaluate.objects.filter(
+                publish=True,
+            )
+        )
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 

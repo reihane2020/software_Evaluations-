@@ -13,12 +13,10 @@ class CommentReplyViewSet(viewsets.ModelViewSet):
     queryset = CommentEvaluateResult.objects.all()
 
 
-    def perform_create(self, serializer):
-        serializer.save(user_id=self.request.user)
-
-
     def create(self, request, *args, **kwargs):
-        serializer = CommentReplySerializer(data=request.data)
+        d = request.data
+        d.user_id = self.request.user
+        serializer = CommentReplySerializer(data=d)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)

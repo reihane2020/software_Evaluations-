@@ -84,7 +84,7 @@ class InviteToMySoftwareView(APIView):
             user=user,
             title='You invited to evaluate ' + project.name,
             content=f"You invited to evaluate a software.\nSoftware name: {project.name}",
-            url='https://evaluation.iran.liara.run/evaluate/' + str(project.id)
+            url='/evaluate/' + str(project.id)
         )
 
         return Response(True)

@@ -40,7 +40,7 @@ def check_send(list):
                 user=st.software.created_by,
                 title=f"Your evaluation time will finish in 3 days",
                 content=f"Your evaluation for {st.software.name} will finish in 3 days, but you can extend it",
-                url="#"
+                url='/softwares/' + str(project.id) + '/evaluation'
             )
             send_mail(
                 f"Your evaluation time will finish in 3 days",
@@ -55,7 +55,7 @@ def check_send(list):
                 user=st.software.created_by,
                 title=f"Your evaluation time finished",
                 content=f"Your evaluation for {st.software.name} time finished, but you can extend it",
-                url="#"
+                url='/softwares/' + str(project.id) + '/evaluation'
             )
             send_mail(
                 f"Your evaluation time finished",

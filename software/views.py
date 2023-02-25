@@ -8,7 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.views import APIView
 import json
 from django.core.mail import send_mail
-
+from notification.models import Notification
 
 # Create your views here.
 class StandardResultsSetPagination(PageNumberPagination):

@@ -24,10 +24,12 @@ class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
 
     def getreply(self, obj):
         print("cc")
-        cc = CommentReply.objects.filter(parent=obj.pk)
+        # cc = CommentReply.objects.filter(parent=obj.pk)
         # ss = CommentReplySerializer(cc, many=True)
         print("obj.pk")
         print(obj)
+        print(obj.id)
+        print(obj.pk)
         # print(cc)
         return obj
 

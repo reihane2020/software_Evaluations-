@@ -16,3 +16,6 @@ class CommentReply(models.Model):
     )
     content = models.TextField(default='')
     datetime = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-id']

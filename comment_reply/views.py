@@ -15,8 +15,8 @@ class CommentReplyViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         d = {
-            "content": request.data.content,
-            "parent": request.data.parent,
+            "content": self.request.data['content'],
+            "parent": self.request.data['parent'],
             "user_id": self.request.user
         }
         serializer = CommentReplySerializer(data=d)

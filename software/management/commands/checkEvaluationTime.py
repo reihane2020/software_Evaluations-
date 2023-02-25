@@ -38,13 +38,13 @@ def check_send(list):
         if delta == 3:
             Notification.objects.create(
                 user=st.software.created_by,
-                title=f"Your Metric evaluation time will finish in 3 days",
-                content=f"Your Metric evaluation for {st.software.name} will finish in 3 days, but you can extend it",
+                title=f"Your evaluation time will finish in 3 days",
+                content=f"Your evaluation for {st.software.name} will finish in 3 days, but you can extend it",
                 url="#"
             )
             send_mail(
-                f"Your Metric evaluation time will finish in 3 days",
-                f"Your Metric evaluation for {st.software.name} will finish in 3 days, but you can extend it",
+                f"Your evaluation time will finish in 3 days",
+                f"Your evaluation for {st.software.name} will finish in 3 days, but you can extend it",
                 'evaluation@mail.rasoul707.ir',
                 [ev.software.created_by.email],
                 fail_silently=False,
@@ -53,13 +53,13 @@ def check_send(list):
         elif delta == 0:
             Notification.objects.create(
                 user=st.software.created_by,
-                title=f"Your Metric evaluation time finished",
-                content=f"Your Metric evaluation for {st.software.name} time finished, but you can extend it",
+                title=f"Your evaluation time finished",
+                content=f"Your evaluation for {st.software.name} time finished, but you can extend it",
                 url="#"
             )
             send_mail(
-                f"Your Metric evaluation time finished",
-                f"Your Metric evaluation for {st.software.name} time finished, but you can extend it",
+                f"Your evaluation time finished",
+                f"Your evaluation for {st.software.name} time finished, but you can extend it",
                 'evaluation@mail.rasoul707.ir',
                 [ev.software.created_by.email],
                 fail_silently=False,

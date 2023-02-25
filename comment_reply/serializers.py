@@ -26,8 +26,7 @@ class CommentEvaluateForResultSerializer(serializers.ModelSerializer):
         # cc = CommentReply.objects.filter(parent=obj.pk)
         # ss = CommentReplySerializer(cc, many=True)
         print("obj.pk")
-        print(obj.pk)
-        return 555
+        return obj
 
     class Meta:
         model = CommentEvaluateResult
@@ -43,7 +42,6 @@ class CommentResultSerializer(serializers.ModelSerializer):
         cc = CommentEvaluateResult.objects.filter(evaluate=obj.pk)
         ss = CommentEvaluateForResultSerializer(cc, many=True)
         return ss.data
-
     
 
     class Meta:
@@ -53,6 +51,5 @@ class CommentResultSerializer(serializers.ModelSerializer):
             'section',
             'evaluates',
             'data',
-
         ]
         depth = 1

@@ -145,8 +145,10 @@ class SoftwareViewSet(viewsets.ReadOnlyModelViewSet):
             for index, qs in enumerate(serializer.data):
                 if len(qs['evaluations']) > 0:
                     if len(_type) > 0:
-                        if qs['evaluations'] in _type:
-                            data.append(queryset[index])
+                        for m in _type:
+                            if m in qs['evaluations']:
+                                data.append(queryset[index])
+                                break
                     else:
                         data.append(queryset[index])
             

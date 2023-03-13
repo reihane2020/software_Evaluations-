@@ -12,7 +12,7 @@ class _UserAdmin(UserAdmin):
                 "first_name",
                 "last_name",
                 "email",
-                ("phone_number", "is_verified_phone"),
+                ("phone_number", "is_verified_phone", "phone_otp_code", "phone_otp_key"),
                 "degree",
                 "avatar",
                 "bio"

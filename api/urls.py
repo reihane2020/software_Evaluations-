@@ -19,8 +19,25 @@ from django.urls.conf import include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
+
+
+
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    # path('ratings/', include('star_ratings.urls', namespace='ratings')),
-    path('api/', include('main.urls')),
+    path(r'admin/', admin.site.urls),
+    path(r'auth/', include('authentication.urls')),
+    path(r'upload/', include('upload.urls')),
+    path(r'setting/', include('setting.urls')),
+
+    path(r'software/', include('software.urls')),
+    path(r'metric/', include('metric_evaluation.urls')),
+    path(r'comment/', include('comment_evaluation.urls')),
+    path(r'rating/', include('rating_evaluation.urls')),
+    path(r'compare/', include('compare_evaluation.urls')),
+    path(r'questionnaire/', include('questionnaire_evaluation.urls')),
+
+    path(r'score/', include('evaluation_score.urls')),
+    path(r'notification/', include('notification.urls')),
+    path(r'comment_reply/', include('comment_reply.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
